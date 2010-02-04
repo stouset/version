@@ -77,7 +77,7 @@ class Version
     { :major    => self.major,
       :minor    => self.minor,
       :revision => self.revision,
-      :rest     => self.rest }
+      :rest     => self.length > 3 ? self.components.drop(3) : nil }
   end
   
   def to_s
