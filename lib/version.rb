@@ -56,6 +56,8 @@ class Version
   def to_version
     self
   end
+  
+  alias inspect to_s
 end
 
 class Array
