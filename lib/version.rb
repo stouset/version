@@ -32,6 +32,21 @@ class Version
     from_a(components)
   end
   
+  def bump(part = self.length)
+    self.dup.bump!(part)
+  end
+  
+  def bump!(part = self.length)
+    before = self.to_a.take(part + 1)
+    after  = self.to_a.drop(part + 1)
+    
+    before[-1] = before[-1].succ
+    after      = Array.new(after.length, 0)
+    
+    from_a(before + after)
+    self
+  end
+  
   def length
     self.to_a.length
   end
