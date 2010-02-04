@@ -4,32 +4,36 @@
 class Version
   include Comparable
   
-  attr_accessor :major
-  attr_accessor :minor
-  attr_accessor :revision
-  attr_accessor :rest
-  
   #
   # Creates a new Version number, with a +major+ version number, +minor+
   # revision number, +revision+ number, and optionally more (unnamed)
   # version components.
   #
   def initialize(major, minor = 0, revision = nil, *rest)
-    self.major    = major
-    self.minor    = minor
-    self.revision = revision
-    self.rest     = rest
+    self.components = [ major, minor, revision, *rest ].compact
+  end
+  
+  [ :major, :minor, :revision ].each.with_index do |component, index|
+    define_method(:"#{component}")  {    self[index]          }
+    define_method(:"#{component}=") {|v| self[index] = v.to_s }
   end
   
   def [](index)
-    self.to_a[index]
+    self.components[index]
   end
   
   def []=(index, value)
-    components        = self.to_a
-    components[index] = value
-    
-    from_a(components)
+    if index < self.length
+      length = self.length - index
+      zeroes = Array.new(length, 0)
+      
+      self.components[index, length] = [ value, *zeroes ]
+    else
+      length = (self.length - index).abs
+      zeroes = Array.new(length, 0)
+      
+      self.components[index - length, length] = (zeroes << value)
+    end
   end
   
   def bump(part = self.length)
@@ -48,7 +52,7 @@ class Version
   end
   
   def length
-    self.to_a.length
+    self.components.length
   end
   
   #
@@ -63,7 +67,7 @@ class Version
   # Converts the version number into an array of its components.
   #
   def to_a
-    [ self.major, self.minor, self.revision, *self.rest ].compact
+    self.components
   end
   
   #
@@ -77,7 +81,7 @@ class Version
   end
   
   def to_s
-    self.to_a.join('.')
+    self.components.join('.')
   end
   
   #
@@ -88,6 +92,10 @@ class Version
   end
   
   alias inspect to_s
+  
+  protected
+  
+  attr_accessor :components
   
   private
   
