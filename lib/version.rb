@@ -36,23 +36,14 @@ class Version
     end
   end
   
-  def bump(part = self.length)
-    self.dup.bump!(part)
-  end
-  
-  def bump!(part = self.length)
-    before = self.to_a.take(part + 1)
-    after  = self.to_a.drop(part + 1)
-    
-    before[-1] = before[-1].succ
-    after      = Array.new(after.length, 0)
-    
-    from_a(before + after)
   def resize!(length)
     self.components = self.components[0, length]
     self
   end
   
+  def bump!(part = self.length - 1, trim = false)
+    self.resize!(part + 1) if trim
+    self[part] = (self[part] || -1).succ
     self
   end
   
