@@ -48,6 +48,11 @@ class Version
     after      = Array.new(after.length, 0)
     
     from_a(before + after)
+  def resize!(length)
+    self.components = self.components[0, length]
+    self
+  end
+  
     self
   end
   
