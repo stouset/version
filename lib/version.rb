@@ -21,6 +21,21 @@ class Version
     self.rest     = rest
   end
   
+  def [](index)
+    self.to_a[index]
+  end
+  
+  def []=(index, value)
+    components        = self.to_a
+    components[index] = value
+    
+    from_a(components)
+  end
+  
+  def length
+    self.to_a.length
+  end
+  
   #
   # Compares a Version against any +other+ object that responds to
   # +to_version+.
@@ -58,6 +73,15 @@ class Version
   end
   
   alias inspect to_s
+  
+  private
+  
+  def from_a(array)
+    self.major    = array.shift
+    self.minor    = array.shift
+    self.revision = array.shift
+    self.rest     = array
+  end
 end
 
 class Array
