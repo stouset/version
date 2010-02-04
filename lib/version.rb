@@ -25,7 +25,7 @@ class Version
   def []=(index, value)
     if index < self.length
       length = self.length - index
-      zeroes = Array.new(length, 0)
+      zeroes = Array.new(length - 1, 0)
       
       self.components[index, length] = [ value, *zeroes ]
     else
