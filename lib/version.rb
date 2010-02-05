@@ -10,7 +10,13 @@ class Version
   # version components.
   #
   def initialize(major, minor = 0, revision = nil, *rest)
-    self.components = [ major, minor, revision, *rest ].compact
+    self.components = []
+    
+    self.major     = major
+    self.minor     = minor
+    self.revision  = revision
+    
+    rest.each.with_index {|v, i| self[3 + i] = v }
   end
   
   [ :major, :minor, :revision ].each.with_index do |component, index|
