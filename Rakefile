@@ -1,6 +1,7 @@
 $: << 'lib'
 
 require 'version'
+require 'rake/version_task'
 
 require 'rubygems'
 require 'rake/gempackagetask'
@@ -12,7 +13,7 @@ spec = Gem::Specification.new do |s|
   s.author  = 'Stephen Touset'
   s.email   = 'stephen@touset.org'
   s.summary = 'simple version-number encapsulation'
-  s.version = '0.5.0'
+  s.version = File.read('VERSION')
   s.files   = FileList['[A-Z]*', 'lib/**/*.rb', 'spec/**/*']
   
   s.add_development_dependency 'rspec'
@@ -23,7 +24,7 @@ Rake::GemPackageTask.new(spec) do |gem|
 end
 
 Rake::RDocTask.new do |doc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+  version = File.read('VERSION')
 
   doc.title    = 'emcien-engine #{version}'
   doc.rdoc_dir = 'doc'
@@ -34,5 +35,7 @@ end
 Spec::Rake::SpecTask.new(:spec) do |spec|
   spec.spec_files = FileList['spec/**/*_spec.rb']
 end
+
+Rake::VersionTask.new
 
 task :default => :spec
