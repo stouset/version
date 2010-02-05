@@ -15,12 +15,22 @@ Version is a simple wrapper around the concept of version-numbering schemes.
 
 == SYNOPSIS:
 
+  # in code
   v = "1.2.0".to_version
   v.to_s           # => 1.2.0
   v.bump!          # => 1.2.1
   v.bump!(1)       # => 1.3.0
   v.bump!(1, true) # => 1.3
   v.major = 2      # => 2.0
+  
+  # in a Rakefile
+  require 'rake/version_task'
+  Rake::VersionTask.new
+  
+  # to automatically put a VERSION constant in a class
+  class Foo
+    Version()
+  end
   
 == INSTALL:
 
