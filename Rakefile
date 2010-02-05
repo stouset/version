@@ -24,7 +24,7 @@ Rake::GemPackageTask.new(spec) do |gem|
 end
 
 Rake::RDocTask.new do |doc|
-  doc.title    = 'emcien-engine #{Version::VERSION}'
+  doc.title    = "emcien-engine #{Version::VERSION}"
   doc.rdoc_dir = 'doc'
   doc.rdoc_files.include('README*')
   doc.rdoc_files.include('lib/**/*.rb')
