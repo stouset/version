@@ -45,7 +45,7 @@ the contents of the version file on disk.
   require 'version'
   
   class Foo
-    Version()
+    is_versioned
   end
   
   Foo::VERSION # => 1.0.0
