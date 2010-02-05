@@ -121,7 +121,8 @@ class Version
     { :major    => self.major,
       :minor    => self.minor,
       :revision => self.revision,
-      :rest     => self.length > 3 ? self.components.drop(3) : nil }
+      :rest     => self.length > 3 ? self.components.drop(3) : nil }.
+      delete_if {|k,v| v.nil? }
   end
   
   #
