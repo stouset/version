@@ -1,3 +1,7 @@
+require 'ext/array'
+require 'ext/hash'
+require 'ext/string'
+
 #
 # Encodes version-numbering logic into a convenient class.
 #
@@ -138,31 +142,4 @@ class Version
   protected
   
   attr_accessor :components
-end
-
-class Array
-  #
-  # Converts the Array into a version number.
-  #
-  def to_version
-    Version.new *self
-  end
-end
-
-class Hash
-  #
-  # Converts the Hash into a version number.
-  #
-  def to_version
-    Version.new *self.values_at(:major, :minor, :revision, :rest)
-  end
-end
-
-class String
-  #
-  # Converts the String into a version number.
-  #
-  def to_version
-    Version.new *self.split(%r{\.})
-  end
 end
