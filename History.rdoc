@@ -1,7 +1,13 @@
+=== Version 0.6.2 / 2010-02-05
+
+* bug fixes
+  * fix critical bug in Class#is_versioned which prevented it from working at
+    all
+
 === Version 0.6.1 / 2010-02-05
 
 * enhancements
-  * renamed Versioned() to has_version
+  * renamed Versioned() to is_versioned
 
 === Version 0.6.0 / 2010-02-04
 
