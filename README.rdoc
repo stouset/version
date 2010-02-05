@@ -54,8 +54,9 @@ class-level constant.
   
   Foo::VERSION # => 1.0.1
   
-The Class::Version method takes a filename parameter if you use a different
-location for the VERSION file. See the Class::Version rdoc for details.
+The Version.current and Class::is_versioned methods both take a filename
+parameter if you use a different location for the VERSION file. See the
+Version.current rdoc for details.
 
 === Manipulation in Code
 
