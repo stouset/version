@@ -2,6 +2,8 @@
 
 * bug fixes
   * fixed README documentation to properly reflect is_versioned
+  * put core class extensions in a subdirectory of version, to avoid filename
+    collisions with other gems
 
 * enhancements
   * Added Version.current method (closes #2)

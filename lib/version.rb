@@ -1,7 +1,7 @@
-require 'ext/array'
-require 'ext/class'
-require 'ext/hash'
-require 'ext/string'
+require 'version/ext/array'
+require 'version/ext/class'
+require 'version/ext/hash'
+require 'version/ext/string'
 
 require 'pathname'
 
