@@ -1,0 +1,3 @@
+* fully spec all functionality
+* remove file parsing duplication between Class::Version() and
+  Rake::VersionTask

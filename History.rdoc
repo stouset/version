@@ -15,6 +15,7 @@
 
 * todo for 1.0.0
   * full suite of specs
+  * remove duplication in Class::Version() and Rake::VersionTask
 
 === Version 0.5.0 / 2010-02-04
 
