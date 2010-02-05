@@ -158,5 +158,5 @@ class Version
 end
 
 class Version
-  Version()
+  is_versioned
 end

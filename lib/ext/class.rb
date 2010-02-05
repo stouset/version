@@ -6,7 +6,7 @@ class Class
   # the Version in +filename+. Attempts to guess the filename if none given.
   # Can read both .yml files and plain text.
   #
-  def Version(filename = nil)
+  def is_versioned(filename = nil)
     # attempt to guess the filename if none given
     if filename.nil?
       filename = Pathname.new('.').expand_path.ascend do |d|
