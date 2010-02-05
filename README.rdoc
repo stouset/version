@@ -15,7 +15,6 @@ Version is a simple wrapper around the concept of version-numbering schemes.
 
 == Examples
 
-
 === Rake Tasks
 
 Version comes with a Rake::VersionTask that lets you manage version numbering
