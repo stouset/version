@@ -1,0 +1,23 @@
+=== Version 0.9.0 / 2010-02-04
+
+* bug fixes
+  * when autozeroing version components, use strings, not integers
+
+* enhancements
+  * readme and history files
+  * support for easy version-file management through rake
+    * see rdoc for Rake::VersionTask
+  * eating own dogfood with Rake::VersionTask
+  * make Version#to_hash exclude keys with nil values
+  * extended documentation
+
+* todo for 1.0.0
+  * full suite of specs
+
+=== Version 0.5.0 / 2010-02-04
+
+* initial release
+
+* todo for 1.0.0
+  * full suite of specs
+  * version-bumping rake tasks
