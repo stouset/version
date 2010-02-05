@@ -3,6 +3,9 @@
 * bug fixes
   * fixed README documentation to properly reflect is_versioned
 
+* enhancements
+  * Added Version.current method (closes #2)
+
 === Version 0.7.1 / 2010-02-05
 
 * bug fixes
