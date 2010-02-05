@@ -139,6 +139,13 @@ class Version
   end
   
   #
+  # Returns a YAML representation of the version number.
+  #
+  def to_yaml
+    YAML::dump(self.to_hash)
+  end
+  
+  #
   # Aliased from +to_s+.
   #
   alias inspect to_s
