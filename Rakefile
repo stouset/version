@@ -34,6 +34,8 @@ Spec::Rake::SpecTask.new(:spec) do |spec|
   spec.spec_files = FileList['spec/**/*_spec.rb']
 end
 
-Rake::VersionTask.new
+Rake::VersionTask.new do |v|
+  v.with_git_tag = true
+end
 
 task :default => :spec
