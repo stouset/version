@@ -1,3 +1,9 @@
+=== Version 0.7.0 / 2010-02-05
+
+* enhancements
+  * support for committing and tagging through git
+    * see rdoc for Rake::VersionTask
+
 === Version 0.6.2 / 2010-02-05
 
 * bug fixes

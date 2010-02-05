@@ -5,12 +5,19 @@ class Rake::VersionTask < Rake::TaskLib
   attr_accessor :filename
   attr_writer   :filetype
   
+  # when true, commits version bumps automatically (default: autodetect)
+  attr_accessor :with_git
+  
+  # when true, tags version bumps automatically (default: false)
+  attr_accessor :with_git_tag
+  
   #
   # Creates a new VersionTask with the given +filename+. Attempts to
-  # autodetect the +filetype+.
+  # autodetect the +filetype+ and whether or not git is present.
   #
   def initialize(filename = 'VERSION')
     self.filename = filename
+    self.with_git = File.exist?('.git')
     
     yield(self) if block_given?
     
@@ -91,6 +98,12 @@ class Rake::VersionTask < Rake::TaskLib
         when ''    then version.to_s + "\n"
         when 'yml' then version.to_yaml
       end
+    end
+    
+    if self.with_git
+      `git add #{self.filename}`
+      `git commit -m "Version bump to #{version}"`
+      `git tag #{version}` if self.with_git_tag
     end
     
     version
