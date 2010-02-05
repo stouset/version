@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>stouset/version @ GitHub</title>
+	
+	<style type="text/css">
+		body {
+  		margin-top: 1.0em;
+  		background-color: #0c05c1;
+		  font-family: "Helvetica,Arial,FreeSans"; 
+  		color: #ffffff;
+    }
+    #container {
+      margin: 0 auto;
+      width: 700px;
+    }
+		h1 { font-size: 3.8em; color: #f3fa3e; margin-bottom: 3px; }
+		h1 .small { font-size: 0.4em; }
+		h1 a { text-decoration: none }
+		h2 { font-size: 1.5em; color: #f3fa3e; }
+    h3 { text-align: center; color: #f3fa3e; }
+    a { color: #f3fa3e; }
+    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+    .download { float: right; }
+		pre { background: #000; color: #fff; padding: 15px;}
+    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+    .footer { text-align:center; padding-top:30px; font-style: italic; }
+	</style>
+	
+</head>
+
+<body>
+  <a href="http://github.com/stouset/version"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+  
+  <div id="container">
+
+    <div class="download">
+      <a href="http://github.com/stouset/version/zipball/master">
+        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
+      <a href="http://github.com/stouset/version/tarball/master">
+        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+    </div>
+      
+    <h1><a href="http://github.com/stouset/version">version</a> 
+      <span class="small">by <a href="http://github.com/stouset">stouset</a></span></h1>
+
+    <div class="description">
+      Simple version-numbering encoding and helper methods
+    </div>
+
+    <p>=== Rake Tasks
+
+Version comes with a Rake::VersionTask that lets you manage version numbering
+automatically. Place the following in a Rakefile:
+
+  require 'rake/version_task'
+  Rake::VersionTask.new
+  
+You're all set up.
+
+  $ rake version:create VERSION=0.1.0 # => 0.1.0
+  $ rake version                      # => 0.1.0
+  $ rake version:bump                 # => 0.1.1
+  $ rake version:bump:minor           # => 0.2.0
+  $ rake version:bump:revision        # => 0.2.1
+  $ rake version:bump:major           # => 1.0.0
+  $ rake version:bump:minor           # => 1.0.1
+  $ cat VERSION                       # => 1.0.1
+  
+Version also supports a .yml VERSION file. See the VersionTask rdoc for
+details.
+
+=== Library Versioning
+
+Version lets you automatically keep an in-class VERSION constant in sync with
+the contents of the version file on disk. Version also provides a class-level
++current+ method which lets you get the current version without setting a
+class-level constant.
+
+  require 'version'
+  
+  Version.current # => 1.0.1
+  
+  class Foo
+    is_versioned
+  end
+  
+  Foo::VERSION # => 1.0.1
+  
+The Class::Version method takes a filename parameter if you use a different
+location for the VERSION file. See the Class::Version rdoc for details.
+
+=== Manipulation in Code
+
+All the above functionality is performed behind-the-scenes by the Version
+library. It's simple to use, but I'll be surprised if there's much point
+beyond doing the legwork for the Rake task and class versioning.
+
+  v = "1.2.0".to_version
+  v.to_s           # => 1.2.0
+  v.bump!          # => 1.2.1
+  v.bump!(1)       # => 1.3.0
+  v.bump!(1, true) # => 1.3
+  v.major = 2      # => 2.0
+  v.to_a           # => ['2', '0']
+</p><h2>Dependencies</h2>
+<p>[sudo] gem install version</p>
+<h2>License</h2>
+<p>(The MIT License)
+
+Copyright (c) 2010-2010 Stephen Touset
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<h2>Authors</h2>
+<p>Stephen Touset (stephen@touset.org)<br/><br/>      </p>
+<h2>Contact</h2>
+<p>Stephen Touset (stephen@touset.org)<br/>      </p>
+
+
+    <h2>Download</h2>
+    <p>
+      You can download this project in either
+      <a href="http://github.com/stouset/version/zipball/master">zip</a> or
+      <a href="http://github.com/stouset/version/tarball/master">tar</a> formats.
+    </p>
+    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
+      by running:
+      <pre>$ git clone git://github.com/stouset/version</pre>
+    </p>
+      
+    <div class="footer">
+      get the source code on GitHub : <a href="http://github.com/stouset/version">stouset/version</a>
+    </div>
+    
+  </div>
+
+  
+</body>
+</html>
