@@ -1,3 +1,5 @@
+require 'version'
+
 class Hash
   #
   # Converts the Hash into a version number.

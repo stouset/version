@@ -1,3 +1,5 @@
+require 'version'
+
 class String
   #
   # Converts the String into a version number.

@@ -1,4 +1,5 @@
 require 'pathname'
+require 'version'
 
 class Class
   #
