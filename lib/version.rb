@@ -48,8 +48,12 @@ class Version
   #
   # If +index+ is greater than the length of the version number, pads the
   # version number with zeroes until +index+.
-  #
+  #--
+  # TODO: rewrite sanely
+  #++
   def []=(index, value)
+    self.resize!(index) and return if value.nil? || value.empty?
+    
     if index < self.length
       length = self.length - index
       zeroes = Array.new(length, 0)
