@@ -28,17 +28,26 @@ class Version
     self.components[index]
   end
   
+  #
+  # Set the component of the Version at +index+ to +value+. Zeroes out any
+  # trailing components.
+  #
+  # If +index+ is greater than the length of the Version number, pads the
+  # version number with zeroes until +index+.
+  #
   def []=(index, value)
     if index < self.length
       length = self.length - index
-      zeroes = Array.new(length - 1, 0)
-      
-      self.components[index, length] = [ value, *zeroes ]
-    else
-      length = (self.length - index).abs
       zeroes = Array.new(length, 0)
       
-      self.components[index - length, length] = (zeroes << value)
+      self.components[index, length] = zeroes
+      self.components[index]         = value
+    else
+      length = index - self.length
+      zeroes = Array.new(length, 0)
+      
+      self.components += zeroes
+      self.components << value
     end
   end
   
