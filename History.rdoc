@@ -1,4 +1,4 @@
-=== Version 0.9.0 / 2010-02-04
+=== Version 0.6.0 / 2010-02-04
 
 * bug fixes
   * when autozeroing version components, use strings, not integers
