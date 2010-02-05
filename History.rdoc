@@ -1,4 +1,4 @@
-=== Version 0.8.0 / (unreleased)
+=== Version 0.8.0 / 2010-02-05
 
 * bug fixes
   * fixed README documentation to properly reflect is_versioned
