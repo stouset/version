@@ -56,13 +56,13 @@ class Version
     
     if index < self.length
       length = self.length - index
-      zeroes = Array.new(length, 0)
+      zeroes = Array.new(length, '0')
       
       self.components[index, length] = zeroes
       self.components[index]         = value
     else
       length = index - self.length
-      zeroes = Array.new(length, 0)
+      zeroes = Array.new(length, '0')
       
       self.components += zeroes
       self.components << value
