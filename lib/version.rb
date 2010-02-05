@@ -1,4 +1,5 @@
 require 'ext/array'
+require 'ext/class'
 require 'ext/hash'
 require 'ext/string'
 
@@ -154,4 +155,8 @@ class Version
   protected
   
   attr_accessor :components
+end
+
+class Version
+  Version()
 end

@@ -5,11 +5,13 @@
 
 * enhancements
   * readme and history files
+  * extended documentation
   * support for easy version-file management through rake
     * see rdoc for Rake::VersionTask
+  * support auto-setting VERSION constant in classes
+    * see rdoc for Class::Versioned()
   * eating own dogfood with Rake::VersionTask
   * make Version#to_hash exclude keys with nil values
-  * extended documentation
 
 * todo for 1.0.0
   * full suite of specs
