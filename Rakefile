@@ -13,7 +13,7 @@ spec = Gem::Specification.new do |s|
   s.author  = 'Stephen Touset'
   s.email   = 'stephen@touset.org'
   s.summary = 'simple version-number encapsulation'
-  s.version = File.read('VERSION')
+  s.version = Version::VERSION
   s.files   = FileList['[A-Z]*', 'lib/**/*.rb', 'spec/**/*']
   
   s.add_development_dependency 'rspec'
@@ -24,9 +24,7 @@ Rake::GemPackageTask.new(spec) do |gem|
 end
 
 Rake::RDocTask.new do |doc|
-  version = File.read('VERSION')
-
-  doc.title    = 'emcien-engine #{version}'
+  doc.title    = 'emcien-engine #{Version::VERSION}'
   doc.rdoc_dir = 'doc'
   doc.rdoc_files.include('README*')
   doc.rdoc_files.include('lib/**/*.rb')
