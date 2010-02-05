@@ -1,3 +1,5 @@
+require 'version'
+
 require 'rake/tasklib'
 require 'pathname'
 
