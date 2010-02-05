@@ -138,15 +138,6 @@ class Version
   protected
   
   attr_accessor :components
-  
-  private
-  
-  def from_a(array)
-    self.major    = array.shift
-    self.minor    = array.shift
-    self.revision = array.shift
-    self.rest     = array
-  end
 end
 
 class Array
