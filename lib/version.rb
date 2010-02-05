@@ -3,11 +3,46 @@ require 'ext/class'
 require 'ext/hash'
 require 'ext/string'
 
+require 'pathname'
+
 #
 # Encodes version-numbering logic into a convenient class.
 #
 class Version
   include Comparable
+  
+  #
+  # Searches through the parent directories of the calling method and looks
+  # for a VERSION or VERSION.yml file to parse out the current version. Pass
+  #
+  # Pass a filename to +path+ to override autodetection, or pass a directory
+  # name as +path+ to autodetect within a given directory
+  #
+  def self.current(path = nil)
+    # if path is nil, detect automatically; if path is a directory, detect
+    # automatically in the directory; if path is a filename, use it directly
+    path = path ? Pathname.new(path) : self.version_file(caller.first)
+    path = self.version_file(path) unless path.file?
+            
+    raise 'no VERSION or VERSION.yml found' unless path
+    
+    case path.extname
+      when ''      then path.read.strip.to_version
+      when '.yml'  then YAML::load(path.read).to_version
+    end
+  end
+  
+  #
+  # Attempts to detect the version file for the passed +filename+. Looks up
+  # the directory hierarchy for a file named VERSION or VERSION.yml. Returns
+  # a Pathname for the file if found, otherwise nil.
+  #
+  def self.version_file(filename)
+    Pathname(filename).dirname.expand_path.ascend do |d|
+      break d.join('VERSION')     if d.join('VERSION').exist?
+      break d.join('VERSION.yml') if d.join('VERSION.yml').exist?
+    end
+  end
   
   #
   # Creates a new version number, with a +major+ version number, +minor+
