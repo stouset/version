@@ -4,34 +4,69 @@
 * http://rdoc.info/projects/stouset/version
 * http://getcaliper.com/caliper/project?repo=git%3A%2F%2Fgithub.com%2Fstouset%2Fversion.git
 
-== DESCRIPTION:
+== Description
 
 Version is a simple wrapper around the concept of version-numbering schemes.
 
-== FEATURES:
+== Features
 
 * Rake::VersionTask provides tasks for simple version bumping
 * Version smartly handles several versioning schemes, abstracting the details
 
-== SYNOPSIS:
+== Examples
 
-  # in code
+
+=== Rake Tasks
+
+Version comes with a Rake::VersionTask that lets you manage version numbering
+automatically. Place the following in a Rakefile:
+
+  require 'rake/version_task'
+  Rake::VersionTask.new
+  
+You're all set up.
+
+  $ rake version:create VERSION=0.1.0 # => 0.1.0
+  $ rake version                      # => 0.1.0
+  $ rake version:bump                 # => 0.1.1
+  $ rake version:bump:minor           # => 0.2.0
+  $ rake version:bump:revision        # => 0.2.1
+  $ rake version:bump:major           # => 1.0.0
+  $ cat VERSION                       # => 1.0.0
+  
+Version also supports a .yml VERSION file. See the VersionTask rdoc for
+details.
+
+=== Library Versioning
+
+Version lets you automatically keep an in-class VERSION constant in sync with
+the contents of the version file on disk.
+
+  require 'version'
+  
+  class Foo
+    Version()
+  end
+  
+  Foo::VERSION # => 1.0.0
+  
+The Class::Version method takes a filename parameter if you use a different
+location for the VERSION file. See the Class::Version rdoc for details.
+
+=== Manipulation in Code
+
+All the above functionality is performed behind-the-scenes by the Version
+library. It's simple to use, but I'll be surprised if there's much point
+beyond doing the legwork for the Rake task and class versioning.
+
   v = "1.2.0".to_version
   v.to_s           # => 1.2.0
   v.bump!          # => 1.2.1
   v.bump!(1)       # => 1.3.0
   v.bump!(1, true) # => 1.3
   v.major = 2      # => 2.0
+  v.to_a           # => ['2', '0']
   
-  # in a Rakefile
-  require 'rake/version_task'
-  Rake::VersionTask.new
-  
-  # to automatically put a VERSION constant in a class
-  class Foo
-    Version()
-  end
-  
-== INSTALL:
+== Install
 
   [sudo] gem install version
