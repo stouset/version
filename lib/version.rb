@@ -5,7 +5,7 @@ class Version
   include Comparable
   
   #
-  # Creates a new Version number, with a +major+ version number, +minor+
+  # Creates a new version number, with a +major+ version number, +minor+
   # revision number, +revision+ number, and optionally more (unnamed)
   # version components.
   #
@@ -19,11 +19,21 @@ class Version
     rest.each.with_index {|v, i| self[3 + i] = v }
   end
   
-  [ :major, :minor, :revision ].each.with_index do |component, index|
-    define_method(:"#{component}")  {    self[index]          }
-    define_method(:"#{component}=") {|v| self[index] = v.to_s }
+  #
+  # For +major+, +minor+, and +revision+, make a helper method that gets and
+  # sets each based on accessing indexes.
+  #--
+  # TODO: make these rdoc-capable
+  #++
+  #
+  [ :major, :minor, :revision ].each.with_index do |component, i|
+    define_method(:"#{component}")  {    self[i]          }
+    define_method(:"#{component}=") {|v| self[i] = v.to_s }
   end
   
+  #
+  # Retrieves the component of the Version at +index+.
+  #
   def [](index)
     self.components[index]
   end
@@ -32,7 +42,7 @@ class Version
   # Set the component of the Version at +index+ to +value+. Zeroes out any
   # trailing components.
   #
-  # If +index+ is greater than the length of the Version number, pads the
+  # If +index+ is greater than the length of the version number, pads the
   # version number with zeroes until +index+.
   #
   def []=(index, value)
@@ -51,17 +61,32 @@ class Version
     end
   end
   
+  #
+  # Resizes the Version to +length+, removing any trailing components. Is a
+  # no-op if +length+ is greater than its current length.
+  #
   def resize!(length)
     self.components = self.components[0, length]
     self
   end
   
-  def bump!(part = self.length - 1, trim = false)
-    self.resize!(part + 1) if trim
-    self[part] = (self[part] || -1).succ
+  #
+  # Bumps the version number. Pass +index+ to bump a component other than the
+  # least-significant part. Set +trim+ to true if you want the version to be
+  # resized to only large enough to contain the index.
+  #
+  #    "1.0.4a".bump!          # => "1.0.4b"
+  #    "1.0.4b".bump!(1, true) # => "1.2"
+  #
+  def bump!(index = self.length - 1, trim = false)
+    self.resize!(index + 1) if trim
+    self[index] = (self[index] || -1).succ
     self
   end
   
+  #
+  # Returns the current length of the version number.
+  #
   def length
     self.components.length
   end
@@ -91,6 +116,9 @@ class Version
       :rest     => self.length > 3 ? self.components.drop(3) : nil }
   end
   
+  #
+  # The canonical representation of a version number.
+  #
   def to_s
     self.components.join('.')
   end
@@ -102,6 +130,9 @@ class Version
     self
   end
   
+  #
+  # Aliased from +to_s+.
+  #
   alias inspect to_s
   
   protected
@@ -120,7 +151,7 @@ end
 
 class Array
   #
-  # Converts the Array into a Version number.
+  # Converts the Array into a version number.
   #
   def to_version
     Version.new *self
@@ -129,7 +160,7 @@ end
 
 class Hash
   #
-  # Converts the Hash into a Version number.
+  # Converts the Hash into a version number.
   #
   def to_version
     Version.new *self.values_at(:major, :minor, :revision, :rest)
@@ -138,7 +169,7 @@ end
 
 class String
   #
-  # Converts the String into a Version number.
+  # Converts the String into a version number.
   #
   def to_version
     Version.new *self.split(%r{\.})
