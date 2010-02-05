@@ -1,3 +1,8 @@
+=== Version (unreleased) / (unreleased)
+
+* enhancements
+  * now properly MIT-licensed
+
 === Version 0.8.0 / 2010-02-05
 
 * bug fixes
@@ -6,7 +11,7 @@
     collisions with other gems
 
 * enhancements
-  * Added Version.current method (closes #2)
+  * added Version.current method (closes #2)
 
 === Version 0.7.1 / 2010-02-05
 
