@@ -2,3 +2,4 @@
 * remove file parsing duplication between Class::Version() and
   Rake::VersionTask
 * get rid of gem task warnings
+* support prerelease versions like Gem::Version
