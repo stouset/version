@@ -1,3 +1,8 @@
+=== Version 0.8.0 / (unreleased)
+
+* bug fixes
+  * fixed README documentation to properly reflect is_versioned
+
 === Version 0.7.1 / 2010-02-05
 
 * bug fixes
