@@ -75,7 +75,7 @@ class Version
   # Retrieves the component of the Version at +index+.
   #
   def [](index)
-    self.components[index]
+    self.components[index].join
   end
   
   #
@@ -89,6 +89,9 @@ class Version
   #++
   def []=(index, value)
     self.resize!(index) and return if value.nil? || value.empty?
+    
+    split = (value =~ %r{\d\D}) || value.length
+    value = [ value[0..split].to_i, value[split + 1..-1] ].compact
     
     if index < self.length
       length = self.length - index
@@ -140,14 +143,14 @@ class Version
   # +to_version+.
   #
   def <=>(other)
-    self.to_a <=> other.to_version.to_a
+    self.components <=> other.to_version.components
   end
   
   #
   # Converts the version number into an array of its components.
   #
   def to_a
-    self.components
+    self.components.map {|c| c.join }
   end
   
   #
@@ -157,7 +160,7 @@ class Version
     { :major    => self.major,
       :minor    => self.minor,
       :revision => self.revision,
-      :rest     => self.length > 3 ? self.components.drop(3) : nil }.
+      :rest     => self.length > 3 ? self.to_a.drop(3) : nil }.
       delete_if {|k,v| v.nil? }
   end
   
@@ -165,7 +168,7 @@ class Version
   # The canonical representation of a version number.
   #
   def to_s
-    self.components.join('.')
+    self.to_a.join('.')
   end
   
   #

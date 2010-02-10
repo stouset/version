@@ -2,6 +2,7 @@
 
 * bug fixes
   * fixed project name in some areas
+  * ensure correct sorting of 1.9 <=> 1.10 (closes #3)
 
 * enhancements
   * now properly MIT-licensed
