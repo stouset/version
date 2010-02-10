@@ -1,5 +1,8 @@
 === Version (unreleased) / (unreleased)
 
+* bug fixes
+  * fixed project name in some areas
+
 * enhancements
   * now properly MIT-licensed
 
