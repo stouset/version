@@ -24,9 +24,9 @@ class Version
     # if path is nil, detect automatically; if path is a directory, detect
     # automatically in the directory; if path is a filename, use it directly
     path = path ? Pathname.new(path) : self.version_file(caller.first)
-    path = self.version_file(path) unless path.file?
-            
-    raise 'no VERSION or VERSION.yml found' unless path
+    path = self.version_file(path) unless path.nil? or path.file?
+    
+    return nil unless path
     
     case path.extname
       when ''      then path.read.strip.to_version
@@ -41,8 +41,8 @@ class Version
   #
   def self.version_file(filename)
     Pathname(filename).dirname.expand_path.ascend do |d|
-      break d.join('VERSION')     if d.join('VERSION').exist?
-      break d.join('VERSION.yml') if d.join('VERSION.yml').exist?
+      break d.join('VERSION')     if d.join('VERSION').file?
+      break d.join('VERSION.yml') if d.join('VERSION.yml').file?
     end
   end
   
