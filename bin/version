@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-$: << "/Users/mtodd/Projects/Contributions/version/lib"
-
 begin
   require 'rake'
 rescue LoadError
