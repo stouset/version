@@ -13,7 +13,10 @@ spec = Gem::Specification.new do |s|
   s.email   = 'stephen@touset.org'
   s.summary = 'simple version-number encapsulation'
   s.version = Version.current
-  s.files   = FileList['[A-Z]*', 'lib/**/*.rb', 'spec/**/*']
+  s.files   = FileList['[A-Z]*', 'bin/*', 'lib/**/*.rb', 'spec/**/*']
+  
+  s.bindir      = 'bin'
+  s.executables = ['version']
   
   s.add_development_dependency 'rspec'
 end

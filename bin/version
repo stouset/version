@@ -1,0 +1,48 @@
+#!/usr/bin/env ruby
+
+$: << "/Users/mtodd/Projects/Contributions/version/lib"
+
+begin
+  require 'rake'
+rescue LoadError
+  require 'rubygems'
+  require 'rake'
+end
+
+require 'rake/version_task'
+
+# Supported options:
+# -g - with Git
+# -t - create tags in Git (requires -g)
+# -f FILENAME - sets the filename
+
+if ARGV.delete('-h')
+  puts eval(DATA.read)
+  exit
+end
+
+Rake::VersionTask.new do |v|
+  _, v.filename     = ARGV.slice!(ARGV.index('-f'), 2) if ARGV.include?('-f')
+  _, ENV['VERSION'] = ARGV.slice!(ARGV.index('-v'), 2) if ARGV.include?('-v')
+  v.with_git        = ARGV.delete('-g')
+  v.with_git_tag    = ARGV.delete('-t')
+end
+
+Rake::Task[['version', *ARGV].join(':')].invoke
+
+__END__
+Version: simple version-number encapsulation
+
+Commands:
+  [none]          Print the current version number
+  bump            Bump the least-significant version number
+  bump major      Bump the major version number
+  bump minor      Bump the minor version number
+  bump revision   Bump the revision number
+  create          Creates a version file (default 0.0.0, -v to override)
+
+Options:
+  -g              Commit the version bump to Git
+  -t              Tag the version bump commit (requires -g)
+  -f FILE         Specify the name of the version file (defaults to VERSION)
+  -v VERSION      The version to specify (used when creating)
