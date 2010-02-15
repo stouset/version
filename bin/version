@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+$: << File.join(File.dirname(__FILE__), '..', 'lib')
+
 begin
   require 'rake'
 rescue LoadError
