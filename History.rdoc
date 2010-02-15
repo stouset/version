@@ -6,6 +6,7 @@
   * ensure correct sorting of prerelease versions
 
 * enhancements
+  * Version#prerelease? to determine if it's a prerelease version
   * Version#bump! now accepts symbolic indexes
   * now properly MIT-licensed
   * spec'd

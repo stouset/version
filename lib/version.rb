@@ -98,6 +98,10 @@ class Version
     end
   end
   
+  def prerelease?
+    self.components.any? {|c| c.prerelease? }
+  end
+  
   #
   # Resizes the Version to +length+, removing any trailing components. Is a
   # no-op if +length+ is greater than its current length.
