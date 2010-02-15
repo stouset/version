@@ -15,6 +15,15 @@ if ARGV.delete('-h')
 end
 
 Rake::VersionTask.new do |v|
+  if Version.dotfile.exist?
+    Version.dotfile.read.scan(/(-\w)\s*([^-]+)?/) do |option, value|
+      unless ARGV.include?(option)
+        ARGV << option.strip
+        ARGV << value.strip if value
+      end
+    end
+  end
+  
   _, v.filename     = ARGV.slice!(ARGV.index('-f'), 2) if ARGV.include?('-f')
   _, ENV['VERSION'] = ARGV.slice!(ARGV.index('-v'), 2) if ARGV.include?('-v')
   v.with_git        = ARGV.delete('-g')
@@ -39,3 +48,6 @@ Options:
   -t              Tag the version bump commit (requires -g)
   -f FILE         Specify the name of the version file (defaults to VERSION)
   -v VERSION      The version to specify (used when creating)
+
+Options can be provided in a .version file and will be applied each time the
+binary is called.

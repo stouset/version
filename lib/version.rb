@@ -46,6 +46,16 @@ class Version
     end
   end
   
+  # 
+  # Attempts to detect the .version file containing options for the +version+
+  # binary.
+  # 
+  def self.dotfile
+    Pathname(Dir.pwd).ascend do |d|
+      break d.join('.version') if d.join('.version').exist?
+    end
+  end
+  
   #
   # Creates a new version number, with a +major+ version number, +minor+
   # revision number, +revision+ number, and optionally more (unnamed)

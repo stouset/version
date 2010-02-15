@@ -100,6 +100,9 @@ Full usage information available:
   
   $ version -h
   
+Most of the options the binary accepts can be provided in a .version file and
+will be applied each time the binary is called.
+
 == Install
 
   [sudo] gem install version
