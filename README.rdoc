@@ -3,6 +3,7 @@
 * http://github.com/stouset/version
 * http://rdoc.info/projects/stouset/version
 * http://getcaliper.com/caliper/project?repo=git%3A%2F%2Fgithub.com%2Fstouset%2Fversion.git
+* http://atlruby.org/stouset/posts/138-version-task
 
 == Description
 
@@ -14,6 +15,13 @@ Version is a simple wrapper around the concept of version-numbering schemes.
 * Version smartly handles several versioning schemes, abstracting the details
 
 == Examples
+
+=== Screencast
+
+For a quick introduction, watch the
+screencast[http://blip.tv/file/get/Tkadom-ATLRUGSteveTousetPresentingVersion277.mov]
+of my presentation[http://atlruby.org/stouset/posts/138-version-task] at the
+{Atlanta Ruby Users' Group}[http://atlruby.org/].
 
 === Rake Tasks
 
