@@ -189,9 +189,11 @@ class Version
   end
   
   #
-  # Aliased from +to_s+.
+  # Returns a human-friendly version format.
   #
-  alias inspect to_s
+  def inspect
+    self.to_s.inspect
+  end
   
   protected
   

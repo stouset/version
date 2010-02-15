@@ -8,6 +8,7 @@
 * enhancements
   * Version#prerelease? to determine if it's a prerelease version
   * Version#bump! now accepts symbolic indexes
+  * Version#inspect has slightly friendlier output
   * now properly MIT-licensed
   * spec'd
 
