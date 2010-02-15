@@ -3,8 +3,10 @@
 * bug fixes
   * fixed project name in some areas
   * ensure correct sorting of 1.9 <=> 1.10 (closes #3)
+  * ensure correct sorting of prerelease versions
 
 * enhancements
+  * Version#bump! now accepts symbolic indexes
   * now properly MIT-licensed
   * spec'd
 

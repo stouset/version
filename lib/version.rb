@@ -11,6 +11,8 @@ require 'pathname'
 class Version
   include Comparable
   
+  autoload :Component, 'version/component'
+  
   #
   # Searches through the parent directories of the calling method and looks
   # for a VERSION or VERSION.yml file to parse out the current version. Pass
@@ -50,13 +52,7 @@ class Version
   # version components.
   #
   def initialize(major, minor = 0, revision = nil, *rest)
-    self.components = []
-    
-    self.major     = major
-    self.minor     = minor
-    self.revision  = revision
-    
-    rest.each.with_index {|v, i| self[3 + i] = v }
+    self.components = [ major, minor, revision, *rest ]
   end
   
   #
@@ -67,15 +63,15 @@ class Version
   #++
   #
   [ :major, :minor, :revision ].each.with_index do |component, i|
-    define_method(:"#{component}")  {    self[i]          }
-    define_method(:"#{component}=") {|v| self[i] = v.to_s }
+    define_method(:"#{component}")  {    self[i]     }
+    define_method(:"#{component}=") {|v| self[i] = v }
   end
   
   #
   # Retrieves the component of the Version at +index+.
   #
   def [](index)
-    self.components[index].join
+    self.components[index] ? self.components[index].to_s : nil
   end
   
   #
@@ -84,25 +80,19 @@ class Version
   #
   # If +index+ is greater than the length of the version number, pads the
   # version number with zeroes until +index+.
-  #--
-  # TODO: rewrite sanely
-  #++
+  #
   def []=(index, value)
-    self.resize!(index) and return if value.nil? || value.empty?
+    return self.resize!(index)               if value.nil? || value.to_s.empty?
+    return self[self.length + index] = value if index < 0
     
-    split = (value =~ %r{\d\D}) || value.length
-    value = [ value[0..split].to_i, value[split + 1..-1] ].compact
+    length = self.length - index
+    zeroes = Array.new length.abs, Version::Component.new('0')
+    value  = Version::Component.new(value.to_s)
     
-    if index < self.length
-      length = self.length - index
-      zeroes = Array.new(length, '0')
-      
+    if length >= 0
       self.components[index, length] = zeroes
       self.components[index]         = value
     else
-      length = index - self.length
-      zeroes = Array.new(length, '0')
-      
       self.components += zeroes
       self.components << value
     end
@@ -113,7 +103,7 @@ class Version
   # no-op if +length+ is greater than its current length.
   #
   def resize!(length)
-    self.components = self.components[0, length]
+    self.components = self.components.take(length)
     self
   end
   
@@ -122,12 +112,21 @@ class Version
   # least-significant part. Set +trim+ to true if you want the version to be
   # resized to only large enough to contain the index.
   #
-  #    "1.0.4a".bump!          # => "1.0.4b"
-  #    "1.0.4b".bump!(1, true) # => "1.2"
+  #    "1.0.4a".bump!               # => '1.0.5'
+  #    "1.0.4a".bump!(:pre)         # => '1.0.5b'
+  #    "1.0.4a".bump!(:minor, true) # => '1.2'
   #
   def bump!(index = self.length - 1, trim = false)
-    self.resize!(index + 1) if trim
-    self[index] = (self[index] || -1).succ
+    case index
+      when :major    then self.bump!(0, trim)
+      when :minor    then self.bump!(1, trim)
+      when :revision then self.bump!(2, trim)
+      when :pre      then self[-1] = self.components[-1].next(true)
+      else
+        self.resize!(index + 1) if (trim or index >= self.length)
+        self[index] = self.components[index].next
+    end
+    
     self
   end
   
@@ -150,7 +149,7 @@ class Version
   # Converts the version number into an array of its components.
   #
   def to_a
-    self.components.map {|c| c.join }
+    self.components.map {|c| c.to_s }
   end
   
   #
@@ -192,7 +191,13 @@ class Version
   
   protected
   
-  attr_accessor :components
+  def components
+    @components ||= []
+  end
+  
+  def components=(components)
+    components.each_with_index {|c, i| self[i] = c }
+  end
 end
 
 class Version
