@@ -13,7 +13,34 @@ end
 describe Version do
   include ImplicitVersion
   
-  subject { "1.6.3a".to_version }
+  subject { v2_9 }
+  
+  its(:major)       { should == '2'   }
+  its(:minor)       { should == '9'   }
+  its(:revision)    { should be_nil   }
+  its(:prerelease?) { should be_false }
+  
+  it 'should major-bump to 3.0' do
+    subject.bump!(:major).should == v3_0
+  end
+  
+  it 'should minor-bump to 2.10' do
+    subject.bump!(:minor).should == v2_10
+  end
+  
+  it 'should revision-bump to 2.9.1' do
+    subject.bump!(:revision).should == v2_9_1
+  end
+  
+  it 'should prerelease-bump to 2.10a' do
+    subject.bump!(:pre).should == v2_10a
+  end
+end
+
+describe Version, 'with a prerelease version' do
+  include ImplicitVersion
+  
+  subject { v1_6_3a }
   
   its(:major)       { should == '1'  }
   its(:minor)       { should == '6'  }
