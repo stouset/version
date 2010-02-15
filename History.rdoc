@@ -9,6 +9,8 @@
   * Version#prerelease? to determine if it's a prerelease version
   * Version#bump! now accepts symbolic indexes
   * Version#inspect has slightly friendlier output
+  * VersionTask now correctly bumps prerelease versions
+  * VersionTask has new +version:bump:pre+ task
   * now properly MIT-licensed
   * spec'd
 

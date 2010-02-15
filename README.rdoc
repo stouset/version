@@ -38,6 +38,8 @@ You're all set up.
   $ rake version:bump                 # => 0.1.1
   $ rake version:bump:minor           # => 0.2.0
   $ rake version:bump:revision        # => 0.2.1
+  $ rake version:bump:pre             # => 0.2.1a
+  $ rake version:bump                 # => 0.2.2
   $ rake version:bump:major           # => 1.0.0
   $ rake version:bump:minor           # => 1.0.1
   $ cat VERSION                       # => 1.0.1

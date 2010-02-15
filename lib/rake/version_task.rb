@@ -73,6 +73,9 @@ class Rake::VersionTask < Rake::TaskLib
         
         desc 'Bump the revision number'
         task(:revision => filename) { puts write(read.bump!(:revision)) }
+        
+        desc 'Bump to a prerelease version'
+        task(:pre => filename) { puts write(read.bump!(:pre)) }
       end
     end
   end
