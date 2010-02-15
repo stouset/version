@@ -1,6 +1,5 @@
 $: << 'lib'
 
-require 'version'
 require 'rake/version_task'
 
 require 'rubygems'
@@ -13,7 +12,7 @@ spec = Gem::Specification.new do |s|
   s.author  = 'Stephen Touset'
   s.email   = 'stephen@touset.org'
   s.summary = 'simple version-number encapsulation'
-  s.version = Version::VERSION
+  s.version = Version.current
   s.files   = FileList['[A-Z]*', 'lib/**/*.rb', 'spec/**/*']
   
   s.add_development_dependency 'rspec'
@@ -24,7 +23,7 @@ Rake::GemPackageTask.new(spec) do |gem|
 end
 
 Rake::RDocTask.new do |doc|
-  doc.title    = "version #{Version::VERSION}"
+  doc.title    = "version #{Version.current}"
   doc.rdoc_dir = 'doc'
   doc.rdoc_files.include('README*')
   doc.rdoc_files.include('lib/**/*.rb')
