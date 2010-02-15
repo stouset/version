@@ -82,6 +82,24 @@ beyond doing the legwork for the Rake task and class versioning.
   v.major = 2           # => 2.0
   v.to_a                # => ['2', '0']
   
+=== Binary
+
+Version comes with a binary that lets you manage version numbering
+automatically.
+
+  $ version -v 0.1.0 create           # => 0.1.0
+  $ version                           # => 0.1.0
+  $ version bump                      # => 0.1.1
+  $ version bump minor                # => 0.2.0
+  $ version bump revision             # => 0.2.1
+  $ version bump major                # => 1.0.0
+  $ version bump minor                # => 1.0.1
+  $ cat VERSION                       # => 1.0.1
+  
+Full usage information available:
+  
+  $ version -h
+  
 == Install
 
   [sudo] gem install version
