@@ -11,11 +11,6 @@ end
 
 require 'rake/version_task'
 
-# Supported options:
-# -g - with Git
-# -t - create tags in Git (requires -g)
-# -f FILENAME - sets the filename
-
 if ARGV.delete('-h')
   puts eval(DATA.read)
   exit
