@@ -66,13 +66,13 @@ class Rake::VersionTask < Rake::TaskLib
       
       namespace :bump do
         desc 'Bump the major version number'
-        task(:major => filename) { puts write(read.bump!(0)) }
+        task(:major => filename) { puts write(read.bump!(:major)) }
         
         desc 'Bump the minor version number'
-        task(:minor => filename) { puts write(read.bump!(1)) }
+        task(:minor => filename) { puts write(read.bump!(:minor)) }
         
         desc 'Bump the revision number'
-        task(:revision => filename) { puts write(read.bump!(2)) }
+        task(:revision => filename) { puts write(read.bump!(:revision)) }
       end
     end
   end
