@@ -1,18 +1,19 @@
-=== Version (unreleased) / (unreleased)
+=== Version 0.9.0 / 2010-02-15
 
 * bug fixes
   * fixed project name in some areas
   * ensure correct sorting of 1.9 <=> 1.10 (closes #3)
   * ensure correct sorting of prerelease versions
+  * Version.current returns nil if no VERSION found (closes #4)
 
 * enhancements
   * Version#prerelease? to determine if it's a prerelease version
   * Version#bump! now accepts symbolic indexes
   * Version#inspect has slightly friendlier output
   * VersionTask now correctly bumps prerelease versions
-  * VersionTask has new +version:bump:pre+ task
+  * VersionTask has new version:bump:pre task
   * now properly MIT-licensed
-  * spec'd
+  * somewhat spec'd
 
 === Version 0.8.0 / 2010-02-05
 
