@@ -1,3 +1,4 @@
 * remove file parsing duplication between Version.current and
   Rake::VersionTask
 * get rid of gem task warnings
+* improved pre-bumping (version:bump:major:pre?)
