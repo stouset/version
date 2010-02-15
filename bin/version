@@ -12,7 +12,7 @@ end
 require 'rake/version_task'
 
 if ARGV.delete('-h')
-  puts eval(DATA.read)
+  puts DATA.read
   exit
 end
 
