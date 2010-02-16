@@ -31,7 +31,7 @@ class Version::Component
   def next!(pre = false)
     case
       when (    pre and     self.prerelease?) then self.letter.next!
-      when (    pre and not self.prerelease?) then self.letter = 'a'
+      when (    pre and not self.prerelease?) then self.letter, self.digits = 'a', self.digits.next
       when (not pre and     self.prerelease?) then self.letter = ''
       when (not pre and not self.prerelease?) then self.digits = self.digits.next
     end
