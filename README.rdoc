@@ -43,6 +43,24 @@ You're all set up.
   $ rake version:bump:major           # => 1.0.0
   $ rake version:bump:minor           # => 1.0.1
   $ cat VERSION                       # => 1.0.1
+
+The VersionTask can automatically manage git tagging for
+you, too.
+
+  Rake::VersionTask.new do |task|
+    task.with_git_tag = true
+  end
+
+And if you want the VersionTask to automatically emit updated gemspecs on
+version-bumps, use the +with_gemspec+ flag.
+
+  spec = Gem::Specification.new do |s|
+    ...
+  end
+  
+  Rake::VersionTask.new do |task|
+    task.with_gemspec = spec
+  end
   
 Version also supports a .yml VERSION file. See the VersionTask rdoc for
 details.
