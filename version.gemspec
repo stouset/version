@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name    = 'version'
-  s.version = File.read('VERSION')
+  s.version = File.read File.join(File.dirname(__FILE__), 'VERSION')
   s.summary = 'simple version-number encapsulation'
   
   s.author  = 'Stephen Touset'
