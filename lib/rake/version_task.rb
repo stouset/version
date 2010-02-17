@@ -39,7 +39,7 @@ class Rake::VersionTask < Rake::TaskLib
   end
   
   def gemspec
-    Pathname["#{with_gemspec.name}.gemspec"] if with_gemspec
+    Pathname("#{with_gemspec.name}.gemspec") if with_gemspec
   end
   
   protected
