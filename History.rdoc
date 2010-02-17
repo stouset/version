@@ -1,3 +1,8 @@
+=== Version (unreleased) / (unreleased)
+
+* enhancements
+  * extracted gemspec into its own file
+
 === Version 0.9.0 / 2010-02-15
 
 * bug fixes
