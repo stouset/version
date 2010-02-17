@@ -13,6 +13,10 @@ class Rake::VersionTask < Rake::TaskLib
   # when true, tags version bumps automatically (default: false)
   attr_accessor :with_git_tag
   
+  # when set with a Gem::Specification, automatically emits an updated
+  # gemspec on version bumps
+  attr_accessor :with_gemspec
+  
   #
   # Creates a new VersionTask with the given +filename+. Attempts to
   # autodetect the +filetype+ and whether or not git is present.
@@ -32,6 +36,10 @@ class Rake::VersionTask < Rake::TaskLib
   #
   def filetype
     @filetype || self.path.extname[1..-1]
+  end
+  
+  def gemspec
+    Pathname["#{with_gemspec.name}.gemspec"] if with_gemspec
   end
   
   protected
@@ -105,8 +113,14 @@ class Rake::VersionTask < Rake::TaskLib
       end
     end
     
+    if self.with_gemspec
+      with_gemspec.version = version
+      gemspec.open('w') {|io| io << with_gemspec.to_ruby }
+    end
+    
     if self.with_git
       `git add #{self.filename}`
+      `git add #{self.gemspec}` if self.with_gemspec
       `git commit -m "Version bump to #{version}"`
       `git tag #{version}` if self.with_git_tag
     end
