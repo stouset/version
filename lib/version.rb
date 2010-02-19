@@ -62,7 +62,7 @@ class Version
   # TODO: make these rdoc-capable
   #++
   #
-  [ :major, :minor, :revision ].each.with_index do |component, i|
+  [ :major, :minor, :revision ].to_enum.each.with_index do |component, i|
     define_method(:"#{component}")  {    self[i]     }
     define_method(:"#{component}=") {|v| self[i] = v }
   end
