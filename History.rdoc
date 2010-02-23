@@ -1,10 +1,12 @@
-=== Version 0.9.1 / 2010-02-23
-
-* enhancements
-  * automagic gemspec generation
+=== Version 0.9.2 / 2010-02-23
 
 * bug fixes
   * Ruby 1.8.6 support (closes #5)
+
+=== Version 0.9.1 / 2010-02-17
+
+* enhancements
+  * automagic gemspec generation
 
 === Version 0.9.0 / 2010-02-15
 
