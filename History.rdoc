@@ -1,4 +1,4 @@
-=== Version (unreleased) / (unreleased)
+=== Version 0.9.1 / 2010-02-23
 
 * enhancements
   * automagic gemspec generation
