@@ -128,7 +128,7 @@ class Version
       when :pre      then self[-1] = self.components[-1].next(true)
       else
         self.resize!(index + 1) if (trim or index >= self.length)
-        self[index] = self.components[index].next
+        self[index] = (self.components[index] || Component.new('0')).next
     end
     
     self
