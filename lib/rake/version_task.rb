@@ -64,7 +64,7 @@ class Rake::VersionTask < Rake::TaskLib
     
     namespace :version do
       desc 'Creates a version file with an optional VERSION parameter'
-      task(:create ) do
+      task(:create) do
         version = (ENV['VERSION'] || '0.0.0').to_version
         puts write(version)
       end
