@@ -1,6 +1,5 @@
 require 'version/ext/array'
 require 'version/ext/module'
-require 'version/ext/class'
 require 'version/ext/hash'
 require 'version/ext/string'
 
