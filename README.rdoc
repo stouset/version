@@ -1,8 +1,7 @@
 = Version
 
 * http://github.com/stouset/version
-* http://rdoc.info/projects/stouset/version
-* http://getcaliper.com/caliper/project?repo=git%3A%2F%2Fgithub.com%2Fstouset%2Fversion.git
+* http://rdoc.info/gems/version/
 * http://atlruby.org/stouset/posts/138-version-task
 
 == Description
