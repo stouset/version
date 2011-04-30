@@ -82,8 +82,16 @@ class Rake::VersionTask < Rake::TaskLib
         desc 'Bump the revision number'
         task(:revision => filename) { puts write(read.bump!(:revision)) }
         
-        desc 'Bump to a prerelease version'
+        desc 'Bump to a major prerelease version'
         task(:pre => filename) { puts write(read.bump!(:pre)) }
+        
+        namespace :pre do
+          desc 'Bump to a minor prerelease version'
+          task(:minor => filename) { puts write(read.bump!(:minor, :pre)) }
+          
+          desc 'Bump to a revision prerelease version'
+          task(:revision => filename) { puts write(read.bump!(:revision, :pre)) }
+        end
       end
     end
   end
@@ -106,25 +114,35 @@ class Rake::VersionTask < Rake::TaskLib
   # Writes out +version+ to the file at +filename+ with the correct format.
   #
   def write(version)
-    path.open('w') do |io|
-      io << case filetype.to_s
-        when ''    then version.to_s + "\n"
-        when 'yml' then version.to_yaml
+    if version != current_version
+      path.open('w') do |io|
+        io << case filetype.to_s
+          when ''    then version.to_s + "\n"
+          when 'yml' then version.to_yaml
+        end
+      end
+    
+      if self.with_gemspec
+        with_gemspec.version = version
+        gemspec.open('w') {|io| io << with_gemspec.to_ruby }
+      end
+    
+      if self.with_git
+        `git add #{self.filename}`
+        `git add #{self.gemspec}` if self.with_gemspec
+        `git commit -m "Version bump to #{version}"`
+        `git tag #{version}` if self.with_git_tag
       end
     end
     
-    if self.with_gemspec
-      with_gemspec.version = version
-      gemspec.open('w') {|io| io << with_gemspec.to_ruby }
-    end
-    
-    if self.with_git
-      `git add #{self.filename}`
-      `git add #{self.gemspec}` if self.with_gemspec
-      `git commit -m "Version bump to #{version}"`
-      `git tag #{version}` if self.with_git_tag
-    end
-    
     version
+  end
+  
+  def current_version
+    begin
+      version = read
+    rescue
+      version = 'n/a'
+    end
   end
 end
