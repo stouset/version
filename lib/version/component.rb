@@ -24,6 +24,21 @@ class Version::Component
     not self.letter.empty?
   end
   
+  def prerelease
+    if self.prerelease?
+      self.next!(true)
+    else
+      self.letter = 'a'
+      self
+    end
+  end
+  
+  def unprerelease
+    if self.prerelease?
+      self.next!
+    end
+  end
+  
   def next(pre = false)
     self.dup.next!(pre)
   end

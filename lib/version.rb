@@ -112,23 +112,41 @@ class Version
   end
   
   #
-  # Bumps the version number. Pass +index+ to bump a component other than the
-  # least-significant part. Set +trim+ to true if you want the version to be
-  # resized to only large enough to contain the index.
+  # Bumps the version number. Pass +component+ to bump a component other than the
+  # least-significant part. Set +pre+ to :pre if you want to bump the component
+  # to a prerelease version. Set +trim+ to true if you want the version to be
+  # resized to only large enough to contain the component set.
   #
-  #    "1.0.4a".bump!               # => '1.0.5'
-  #    "1.0.4a".bump!(:pre)         # => '1.0.5b'
-  #    "1.0.4a".bump!(:minor, true) # => '1.2'
+  #    "1.0.4a".bump!                     # => '1.0.4'
+  #    "1.0.4a".bump!(:pre)               # => '1.0.4b'
+  #    "1.0.4a".bump!(:minor, nil, true)  # => '1.1'
   #
-  def bump!(index = self.length - 1, trim = false)
-    case index
-      when :major    then self.bump!(0, trim)
-      when :minor    then self.bump!(1, trim)
-      when :revision then self.bump!(2, trim)
-      when :pre      then self[-1] = self.components[-1].next(true)
+  def bump!(component = nil, pre = nil, trim = false)
+    if pre.nil?
+      case component
+        when nil        then self.version_bump(self.length - 1, trim)
+        when :major     then self.version_bump(0, trim)
+        when :minor     then self.version_bump(1, trim)
+        when :revision  then self.version_bump(2, trim)
+        when :pre       then self.bump!(nil, component, trim)
+      end
+    else
+      if self.prerelease?
+        case component
+          when nil        then self.prerelease_bump(-1)
+          when :major     then self.prerelease_bump(0)
+          when :minor     then self.prerelease_bump(1)
+          when :revision  then self.prerelease_bump(2)
+        end
       else
-        self.resize!(index + 1) if (trim or index >= self.length)
-        self[index] = (self.components[index] || Component.new('0')).next
+        if component.nil?
+          self.version_bump(0, trim)
+        else
+          self.bump!(component, nil, trim)
+        end      
+         
+        self[-1] = self.components[-1].dup.prerelease
+      end
     end
     
     self
@@ -203,6 +221,18 @@ class Version
   
   def components=(components)
     components.each_with_index {|c, i| self[i] = c }
+  end
+  
+  def version_bump(index = self.length - 1, trim = false)
+    self.components.dup.delete_if { |e| e == self.components[index]}.each {|c| c.unprerelease }
+    self.resize!(index + 1) if (trim or index >= self.length)
+    self[index] = (self.components[index] || Component.new('0')).next
+  end
+  
+  def prerelease_bump(index)
+    if self.components[index] and self.components[index].prerelease?
+      self[index] = self.components[index].next!(true)
+    end
   end
 end
 

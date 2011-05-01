@@ -59,7 +59,7 @@ class Rake::VersionTask < Rake::TaskLib
     
     file filename
     
-    desc 'Print the current version number'
+    desc "Print the current version number (#{current_version})"
     task(:version => filename) { puts read }
     
     namespace :version do
@@ -68,22 +68,30 @@ class Rake::VersionTask < Rake::TaskLib
         version = (ENV['VERSION'] || '0.0.0').to_version
         puts write(version)
       end
-      
-      desc 'Bump the least-significant version number'
+
+      desc "Bump the least-significant version number to #{current_version{|v| v.bump!}}"
       task(:bump => filename) { puts write(read.bump!) }
-      
+
       namespace :bump do
-        desc 'Bump the major version number'
+        desc "Bump to major version number #{current_version{|v| v.bump!(:major)}}"
         task(:major => filename) { puts write(read.bump!(:major)) }
-        
-        desc 'Bump the minor version number'
+
+        desc "Bump to minor version number #{current_version{|v| v.bump!(:minor)}}"
         task(:minor => filename) { puts write(read.bump!(:minor)) }
-        
-        desc 'Bump the revision number'
+
+        desc "Bump to revision number #{current_version{|v| v.bump!(:revision)}}"
         task(:revision => filename) { puts write(read.bump!(:revision)) }
-        
-        desc 'Bump to a prerelease version'
+
+        desc "Bump to major prerelease version #{current_version{|v| v.bump!(:pre)}}"
         task(:pre => filename) { puts write(read.bump!(:pre)) }
+
+        namespace :pre do
+          desc "Bump to minor prerelease version #{current_version{|v| v.bump!(:minor, :pre)}}"
+          task(:minor => filename) { puts write(read.bump!(:minor, :pre)) }
+
+          desc "Bump to revision prerelease version #{current_version{|v| v.bump!(:revision, :pre)}}"
+          task(:revision => filename) { puts write(read.bump!(:revision, :pre)) }
+        end
       end
     end
   end
@@ -106,25 +114,39 @@ class Rake::VersionTask < Rake::TaskLib
   # Writes out +version+ to the file at +filename+ with the correct format.
   #
   def write(version)
-    path.open('w') do |io|
-      io << case filetype.to_s
-        when ''    then version.to_s + "\n"
-        when 'yml' then version.to_yaml
+    if version != current_version
+      path.open('w') do |io|
+        io << case filetype.to_s
+          when ''    then version.to_s + "\n"
+          when 'yml' then version.to_yaml
+        end
+      end
+    
+      if self.with_gemspec
+        with_gemspec.version = version
+        gemspec.open('w') {|io| io << with_gemspec.to_ruby }
+      end
+    
+      if self.with_git
+        `git add #{self.filename}`
+        `git add #{self.gemspec}` if self.with_gemspec
+        `git commit -m "Version bump to #{version}"`
+        `git tag #{version}` if self.with_git_tag
       end
     end
     
-    if self.with_gemspec
-      with_gemspec.version = version
-      gemspec.open('w') {|io| io << with_gemspec.to_ruby }
-    end
-    
-    if self.with_git
-      `git add #{self.filename}`
-      `git add #{self.gemspec}` if self.with_gemspec
-      `git commit -m "Version bump to #{version}"`
-      `git tag #{version}` if self.with_git_tag
-    end
-    
     version
+  end
+  
+  def current_version
+    begin
+      if block_given?
+        version = yield read
+      else
+        version = read
+      end
+    rescue
+      version = 'n/a'
+    end
   end
 end
