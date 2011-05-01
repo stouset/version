@@ -59,7 +59,7 @@ class Rake::VersionTask < Rake::TaskLib
     
     file filename
     
-    desc "Print the current version number (#{current_version})"
+    desc "Print the current version number (#{read})"
     task(:version => filename) { puts read }
     
     namespace :version do
@@ -68,28 +68,28 @@ class Rake::VersionTask < Rake::TaskLib
         version = (ENV['VERSION'] || '0.0.0').to_version
         puts write(version)
       end
-
-      desc "Bump the least-significant version number to #{current_version{|v| v.bump!}}"
+      
+      desc "Bump to #{read.bump!}"
       task(:bump => filename) { puts write(read.bump!) }
-
+      
       namespace :bump do
-        desc "Bump to major version number #{current_version{|v| v.bump!(:major)}}"
+        desc "Bump to #{read.bump!(:major)}"
         task(:major => filename) { puts write(read.bump!(:major)) }
-
-        desc "Bump to minor version number #{current_version{|v| v.bump!(:minor)}}"
+        
+        desc "Bump to #{read.bump!(:minor)}"
         task(:minor => filename) { puts write(read.bump!(:minor)) }
-
-        desc "Bump to revision number #{current_version{|v| v.bump!(:revision)}}"
+        
+        desc "Bump to #{read.bump!(:revision)}"
         task(:revision => filename) { puts write(read.bump!(:revision)) }
-
-        desc "Bump to major prerelease version #{current_version{|v| v.bump!(:pre)}}"
+        
+        desc "Bump to #{read.bump!(:pre)}"
         task(:pre => filename) { puts write(read.bump!(:pre)) }
-
+        
         namespace :pre do
-          desc "Bump to minor prerelease version #{current_version{|v| v.bump!(:minor, :pre)}}"
+          desc "Bump to #{read.bump!(:minor, :pre)}"
           task(:minor => filename) { puts write(read.bump!(:minor, :pre)) }
-
-          desc "Bump to revision prerelease version #{current_version{|v| v.bump!(:revision, :pre)}}"
+          
+          desc "Bump to #{read.bump!(:revision, :pre)}"
           task(:revision => filename) { puts write(read.bump!(:revision, :pre)) }
         end
       end
@@ -102,7 +102,7 @@ class Rake::VersionTask < Rake::TaskLib
   # Returns the Version contained in the file at +filename+.
   #
   def read
-    contents = path.read
+    contents = path.read rescue '0.0.0'
     
     case filetype.to_s
       when ''    then contents.chomp.to_version
@@ -114,39 +114,27 @@ class Rake::VersionTask < Rake::TaskLib
   # Writes out +version+ to the file at +filename+ with the correct format.
   #
   def write(version)
-    if version != current_version
-      path.open('w') do |io|
-        io << case filetype.to_s
-          when ''    then version.to_s + "\n"
-          when 'yml' then version.to_yaml
-        end
-      end
+    return if version != read
     
-      if self.with_gemspec
-        with_gemspec.version = version
-        gemspec.open('w') {|io| io << with_gemspec.to_ruby }
+    path.open('w') do |io|
+      io << case filetype.to_s
+        when ''    then version.to_s + "\n"
+        when 'yml' then version.to_yaml
       end
+    end
     
-      if self.with_git
-        `git add #{self.filename}`
-        `git add #{self.gemspec}` if self.with_gemspec
-        `git commit -m "Version bump to #{version}"`
-        `git tag #{version}` if self.with_git_tag
-      end
+    if self.with_gemspec
+      with_gemspec.version = version
+      gemspec.open('w') {|io| io << with_gemspec.to_ruby }
+    end
+    
+    if self.with_git
+      `git add #{self.filename}`
+      `git add #{self.gemspec}` if self.with_gemspec
+      `git commit -m "Version bump to #{version}"`
+      `git tag #{version}` if self.with_git_tag
     end
     
     version
-  end
-  
-  def current_version
-    begin
-      if block_given?
-        version = yield read
-      else
-        version = read
-      end
-    rescue
-      version = 'n/a'
-    end
   end
 end
