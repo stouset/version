@@ -129,11 +129,10 @@ class Version
         # mark all but the changed bit as non-prerelease
         self[0...component].each(&:unprerelease!)
         
-        prerelease = self.prerelease?
-
-        self[component] = self[component].next unless pre and component == -1 and self.prerelease?
-        self[component] = self[component].next if pre and prerelease and component == self.length -  1
-        self[-1]        = self[-1].next(true) if pre
+        # I don't even understand this part any more; god help you
+        self[component] = self[component].next if     pre and self.prerelease? and component == self.length -  1
+        self[component] = self[component].next unless pre and self.prerelease? and component == -1
+        self[-1]        = self[-1].next(true)  if pre
         self
     end
   end
