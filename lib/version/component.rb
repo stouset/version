@@ -24,19 +24,8 @@ class Version::Component
     not self.letter.empty?
   end
   
-  def prerelease
-    if self.prerelease?
-      self.next!(true)
-    else
-      self.letter = 'a'
-      self
-    end
-  end
-  
-  def unprerelease
-    if self.prerelease?
-      self.next!
-    end
+  def unprerelease!
+    self.next! if self.prerelease?
   end
   
   def next(pre = false)
@@ -46,7 +35,7 @@ class Version::Component
   def next!(pre = false)
     case
       when (    pre and     self.prerelease?) then self.letter.next!
-      when (    pre and not self.prerelease?) then self.letter = 'a'; self.digits = self.digits.next
+      when (    pre and not self.prerelease?) then self.letter = 'a'
       when (not pre and     self.prerelease?) then self.letter = ''
       when (not pre and not self.prerelease?) then self.digits = self.digits.next
     end

@@ -63,15 +63,8 @@ class Version
   #++
   #
   [ :major, :minor, :revision ].to_enum.each.with_index do |component, i|
-    define_method(:"#{component}")  {    self[i]     }
-    define_method(:"#{component}=") {|v| self[i] = v }
-  end
-  
-  #
-  # Retrieves the component of the Version at +index+.
-  #
-  def [](index)
-    self.components[index] ? self.components[index].to_s : nil
+    define_method(:"#{component}")  { self.components[i] ? self.components[i].to_s : nil }
+    define_method(:"#{component}=") {|v| self[i] = v  }
   end
   
   #
@@ -112,46 +105,36 @@ class Version
   end
   
   #
-  # Bumps the version number. Pass +component+ to bump a component other than the
-  # least-significant part. Set +pre+ to :pre if you want to bump the component
-  # to a prerelease version. Set +trim+ to true if you want the version to be
-  # resized to only large enough to contain the component set.
+  # Bumps the version number. Pass +component+ to bump a component other than
+  # the least-significant part. Set +pre+ to true if you want to bump the
+  # component to a prerelease version. Set +trim+ to true if you want the
+  # version to be resized to only large enough to contain the component set.
   #
-  #    "1.0.4a".bump!                     # => '1.0.4'
-  #    "1.0.4a".bump!(:pre)               # => '1.0.4b'
-  #    "1.0.4a".bump!(:minor, nil, true)  # => '1.1'
+  #    "1.0.4a".bump!                       # => '1.0.4'
+  #    "1.0.4a".bump!(:pre)                 # => '1.0.4b'
+  #    "1.0.4a".bump!(:minor, false, true)  # => '1.1'
+  #    "1.0.4a".bump!(:minor, true, true)   # => '1.1a
+  #    "1.0.4a".bump!(:minor, true, false)  # => '1.1.0a'
   #
-  def bump!(component = nil, pre = nil, trim = false)
-    if pre.nil?
-      case component
-        when nil        then self.version_bump(self.length - 1, trim)
-        when :major     then self.version_bump(0, trim)
-        when :minor     then self.version_bump(1, trim)
-        when :revision  then self.version_bump(2, trim)
-        when :pre       then self.bump!(nil, component, trim)
-      end
-    else
-      if self.prerelease?
-        case component
-          when nil        then self.prerelease_bump(-1)
-          when :major     then self.prerelease_bump(0)
-          when :minor     then self.prerelease_bump(1)
-          when :revision  then self.prerelease_bump(2)
-        end
+  def bump!(component = -1, pre = false, trim = false)
+    case component
+      when :major    then self.bump!(0,  pre,  trim)
+      when :minor    then self.bump!(1,  pre,  trim)
+      when :revision then self.bump!(2,  pre,  trim)
+      when :pre      then self.bump!(-1, true, trim)
       else
-        if component.nil?
-          self.version_bump(0, trim)
-        else
-          self.bump!(component, nil, trim)
-        end      
-         
-        self[-1] = self.components[-1].dup.prerelease
-      end
+        # resize to match the new length, if applicable
+        self.resize!(component + 1) if (trim or component >= self.length)
+        
+        # mark all but the changed bit as non-prerelease
+        self[0...component].each(&:unprerelease!)
+        
+        self[component] = self[component].next unless pre and component == -1 and self.prerelease?
+        self[-1]        = self[-1].next(true) if pre
+        self
     end
-    
-    self
   end
-  
+    
   #
   # Returns the current length of the version number.
   #
@@ -214,6 +197,13 @@ class Version
   end
   
   protected
+  
+  #
+  # Retrieves the component of the Version at +index+.
+  #
+  def [](index)
+    self.components[index] || Component.new('0')
+  end
   
   def components
     @components ||= []

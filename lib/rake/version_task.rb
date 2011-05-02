@@ -86,11 +86,14 @@ class Rake::VersionTask < Rake::TaskLib
         task(:pre => filename) { puts write(read.bump!(:pre)) }
         
         namespace :pre do
-          desc "Bump to #{read.bump!(:minor, :pre)}"
-          task(:minor => filename) { puts write(read.bump!(:minor, :pre)) }
+          desc "Bump to #{read.bump!(:major, true)}"
+          task(:major => filename) { puts write(read.bump!(:major, true)) }
           
-          desc "Bump to #{read.bump!(:revision, :pre)}"
-          task(:revision => filename) { puts write(read.bump!(:revision, :pre)) }
+          desc "Bump to #{read.bump!(:minor, true)}"
+          task(:minor => filename) { puts write(read.bump!(:minor, true)) }
+          
+          desc "Bump to #{read.bump!(:revision, true)}"
+          task(:revision => filename) { puts write(read.bump!(:revision, true)) }
         end
       end
     end

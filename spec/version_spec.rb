@@ -10,7 +10,6 @@ module ImplicitVersion
   end
 end
 
-
 describe Version do
   include ImplicitVersion
   
@@ -37,16 +36,20 @@ describe Version do
     subject.bump!(:revision).should == v2_9_1
   end
   
-  it 'should prerelease-bump to 3.0a' do
-    subject.bump!(:pre).should == v3_0a
+  it 'should prerelease-bump to 2.10a' do
+    subject.bump!(:pre).should == v2_10a
+  end
+  
+  it 'should prerelease-bump major to 3_0a' do
+    subject.bump!(:major, true).should == v3_0a
   end
   
   it 'should prerelease-bump minor to 2.10a' do
-    subject.bump!(:minor, :pre).should == v2_10a
+    subject.bump!(:minor, true).should == v2_10a
   end
   
   it 'should prerelease-bump revision to 2.9.1a' do
-    subject.bump!(:revision, :pre).should == v2_9_1a
+    subject.bump!(:revision, true).should == v2_9_1a
   end
 end
 
@@ -76,21 +79,25 @@ describe Version do
     subject.bump!(:revision).should == v0_10_1
   end
   
-  it 'should prerelease-bump to 1.0.0a' do
-    subject.bump!(:pre).should == v1_0_0a
+  it 'should prerelease-bump to 0.10.1a' do
+    subject.bump!(:pre).should == v0_10_1a
+  end
+  
+  it 'should prerelease-bump major to 1.0.0a' do
+    subject.bump!(:major, true).should == v1_0_0a
   end
   
   it 'should prerelease-bump minor to 0.11.0a' do
-    subject.bump!(:minor, :pre).should == v0_11_0a
+    subject.bump!(:minor, true).should == v0_11_0a
   end
   
   it 'should prerelease-bump revision to 0.10.1a' do
-    subject.bump!(:revision, :pre).should == v0_10_1a
+    subject.bump!(:revision, true).should == v0_10_1a
   end
 end
 
 
-describe Version, 'with a prerelease revision version' do
+describe Version, 'with a prerelease revision' do
   include ImplicitVersion
   
   subject { v1_6_3a }
@@ -99,17 +106,6 @@ describe Version, 'with a prerelease revision version' do
   its(:minor)       { should == '6'  }
   its(:revision)    { should == '3a' }
   its(:prerelease?) { should be_true }
-  
-  it 'should allow indexed access to components' do
-    subject[0].should == '1'
-    subject[1].should == '6'
-    subject[2].should == '3a'
-  end
-  
-  it 'should return nil for unset components' do
-    subject[3].should == nil
-    subject[4].should == nil
-  end
   
   it 'should bump to 1.6.3' do
     subject.bump!.should == v1_6_3
@@ -131,15 +127,18 @@ describe Version, 'with a prerelease revision version' do
     subject.bump!(:pre).should == v1_6_3b
   end
   
-  it 'should prerelease-bump minor to 1.6.3a' do
-    subject.bump!(:minor, :pre).should == v1_6_3a
+  it 'should prerelease-bump major to 2.0.0a' do
+    subject.bump!(:major, true).should == v2_0_0a
   end
   
-  it 'should prerelease-bump revision to 1.6.3b' do
-    subject.bump!(:revision, :pre).should == v1_6_3b
+  it 'should prerelease-bump minor to 1.7.0a' do
+    subject.bump!(:minor, true).should == v1_7_0a
+  end
+  
+  it 'should prerelease-bump revision to 1.6.4a' do
+    subject.bump!(:revision, true).should == v1_6_4a
   end
 end
-
 
 describe Version, 'with a prerelease minor version' do
   include ImplicitVersion
@@ -167,23 +166,22 @@ describe Version, 'with a prerelease minor version' do
     subject.bump!(:revision).should == v1_6_1
   end
   
-  it 'should prerelease-bump to 1.6b' do
+  it 'should bump to 1.6b' do
     subject.bump!(:pre).should == v1_6b
   end
   
-  it 'should prerelease-bump major to 1.6a' do
-    subject.bump!(:major, :pre).should == v1_6a
+  it 'should prerelease-bump major to 2.0a' do
+    subject.bump!(:major, true).should == v2_0a
   end
   
-  it 'should prerelease-bump minor to 1.6b' do
-    subject.bump!(:minor, :pre).should == v1_6b
+  it 'should prerelease-bump minor to 1.7a' do
+    subject.bump!(:minor, true).should == v1_7a
   end
   
-  it 'should prerelease-bump revision to 1.6a' do
-    subject.bump!(:revision, :pre).should == v1_6a
+  it 'should prerelease-bump revision to 1.6.1a' do
+    subject.bump!(:revision, true).should == v1_6_1a
   end
 end
-
 
 describe Version do
   include ImplicitVersion
