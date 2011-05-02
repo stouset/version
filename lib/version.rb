@@ -215,18 +215,6 @@ class Version
   def components=(components)
     components.each_with_index {|c, i| self[i] = c }
   end
-  
-  def version_bump(index = self.length - 1, trim = false)
-    self.components.dup.delete_if { |e| e == self.components[index]}.each {|c| c.unprerelease }
-    self.resize!(index + 1) if (trim or index >= self.length)
-    self[index] = (self.components[index] || Component.new('0')).next
-  end
-  
-  def prerelease_bump(index)
-    if self.components[index] and self.components[index].prerelease?
-      self[index] = self.components[index].next!(true)
-    end
-  end
 end
 
 class Version
