@@ -117,7 +117,7 @@ class Rake::VersionTask < Rake::TaskLib
   # Writes out +version+ to the file at +filename+ with the correct format.
   #
   def write(version)
-    return if version != read
+    return if version == read
     
     path.open('w') do |io|
       io << case filetype.to_s
