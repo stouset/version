@@ -33,6 +33,21 @@ automatically. Place the following in a Rakefile:
 You're all set up.
 
   $ rake version:create VERSION=0.1.0 # => 0.1.0
+
+Now `rake -T version` will tell you what all you can do.
+
+  $ version [master *$%]$ rake -T version
+  rake version                    # Print the current version number (0.1.0)
+  rake version:bump               # Bump to 0.1.1
+  rake version:bump:major         # Bump to 1.0.0
+  rake version:bump:minor         # Bump to 0.2.0
+  rake version:bump:pre           # Bump to 0.1.1a
+  rake version:bump:pre:major     # Bump to 1.0.0a
+  rake version:bump:pre:minor     # Bump to 0.2.0a
+  rake version:bump:pre:revision  # Bump to 0.1.1a
+  rake version:bump:revision      # Bump to 0.1.1
+  rake version:create             # Creates a version file with an optional VERSION parameter
+
   $ rake version                      # => 0.1.0
   $ rake version:bump                 # => 0.1.1
   $ rake version:bump:minor           # => 0.2.0
