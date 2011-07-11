@@ -65,7 +65,7 @@ class Rake::VersionTask < Rake::TaskLib
     namespace :version do
       desc 'Creates a version file with an optional VERSION parameter'
       task(:create) do
-        version = (ENV['VERSION'] || '0.0.0').to_version
+        version = Version.new(ENV['VERSION'] || '0.0.0')
         puts write(version)
       end
       
@@ -107,10 +107,7 @@ class Rake::VersionTask < Rake::TaskLib
   def read
     contents = path.read rescue '0.0.0'
     
-    case filetype.to_s
-      when ''    then contents.chomp.to_version
-      when 'yml' then YAML::load(contents).to_version
-    end
+    Version.new filetype.to_s == 'yml' ? YAML::load(contents) : contents.chomp
   end
   
   #
@@ -135,7 +132,7 @@ class Rake::VersionTask < Rake::TaskLib
       `git add #{self.filename}`
       `git add #{self.gemspec}` if self.with_gemspec
       `git commit -m "Version bump to #{version}"`
-      `git tag #{version}` if self.with_git_tag
+      `git tag -am"Version #{version}" #{version}` if self.with_git_tag
     end
     
     version

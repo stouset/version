@@ -90,8 +90,14 @@ class-level constant.
   
   Version.current # => 1.0.1
   
+  Version.set(Foo)
+  
+  or
+  
   class Foo
-    is_versioned
+  
+    Version.set(self)
+    
   end
   
   Foo::VERSION # => 1.0.1
@@ -106,7 +112,7 @@ All the above functionality is performed behind-the-scenes by the Version
 library. It's simple to use, but I'll be surprised if there's much point
 beyond doing the legwork for the Rake task and class versioning.
 
-  v = "1.2.0".to_version
+  v = Version.new("1.2.0")
   v.to_s                       # => 1.2.0
   v.bump!                      # => 1.2.1
   v.bump!(:major)              # => 2.0.0

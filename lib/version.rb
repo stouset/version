@@ -1,8 +1,3 @@
-require 'version/ext/array'
-require 'version/ext/module'
-require 'version/ext/hash'
-require 'version/ext/string'
-
 require 'pathname'
 
 #
@@ -28,10 +23,7 @@ class Version
     
     return nil unless path
     
-    case path.extname
-      when ''      then path.read.strip.to_version
-      when '.yml'  then YAML::load(path.read).to_version
-    end
+    Version.new path.extname == '.yml' ? YAML::load(path.read) : path.read.strip
   end
   
   #
@@ -46,12 +38,24 @@ class Version
     end
   end
   
+  def self.set(target)
+    raise ArgumentError, 'Version can only be set on a module or class.' unless target.is_a?(Module)
+    target.const_set :VERSION, Version.current(File.dirname(caller.first))
+  end
+
   #
   # Creates a new version number, with a +major+ version number, +minor+
   # revision number, +revision+ number, and optionally more (unnamed)
   # version components.
   #
-  def initialize(major, minor = 0, revision = nil, *rest)
+  def initialize(object)
+    major, minor, revision, *rest = *case object
+    when Array    then object
+    when Hash     then object.values_at(:major, :minor, :revision, :rest)
+    when String   then object.split(%r{\.})
+    when Numeric  then object.to_s.split(%r{\.})
+    else nil
+    end
     self.components = [ major, minor, revision, *rest ]
   end
   
@@ -63,8 +67,8 @@ class Version
   #++
   #
   [ :major, :minor, :revision ].to_enum.each.with_index do |component, i|
-    define_method(:"#{component}")  { self.components[i] ? self.components[i].to_s : nil }
-    define_method(:"#{component}=") {|v| self[i] = v  }
+    define_method(component)  { self.components[i] ? self.components[i].to_s : nil }
+    define_method("#{component}=") {|v| self[i] = v  }
   end
   
   #
@@ -145,11 +149,9 @@ class Version
   end
   
   #
-  # Compares a Version against any +other+ object that responds to
-  # +to_version+.
-  #
+  # Compares a Version against any +other+ object that looks like a version
   def <=>(other)
-    self.components <=> other.to_version.components
+    self.components <=> Version.new(other).components
   end
   
   #
@@ -175,13 +177,6 @@ class Version
   #
   def to_s
     self.to_a.join('.')
-  end
-  
-  #
-  # Returns +self+.
-  #
-  def to_version
-    self
   end
   
   #
@@ -214,8 +209,12 @@ class Version
   def components=(components)
     components.each_with_index {|c, i| self[i] = c }
   end
+  
+  # Set VERSION on Version!
+  set(self)
+  
 end
 
-class Version
-  is_versioned
-end
+require 'version/railtie' if defined?(Rails) && Rails::VERSION::MAJOR >= 3
+
+

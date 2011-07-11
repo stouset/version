@@ -6,7 +6,7 @@ module ImplicitVersion
     super unless block.nil?
     super unless name.to_s =~ /^v[\d\w_]+$/
     
-    name.to_s.gsub(/^v/, '').gsub(/_/, '.').to_version
+    Version.new name.to_s.gsub(/^v/, '').gsub(/_/, '.')
   end
 end
 
