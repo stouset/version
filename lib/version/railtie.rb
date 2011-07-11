@@ -5,7 +5,10 @@ class Version
   class Railtie < Rails::Railtie
 
     Rake::VersionTask.new
-    Version.set Rails.application.class.parent
+    
+    initializer 'version.add_to_application' do |app|
+      Version.set app.class.parent, Rails.root
+    end
 
   end
   
