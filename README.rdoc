@@ -12,6 +12,15 @@ Version is a simple wrapper around the concept of version-numbering schemes.
 
 * Rake::VersionTask provides tasks for simple version bumping
 * Version smartly handles several versioning schemes, abstracting the details
+* Version adds versioning to your Rails3 application
+
+== Installation
+
+=== Using Bundler?
+
+Add the following to your Gemfile
+
+  gem 'version'
 
 == Examples
 
@@ -105,6 +114,23 @@ class-level constant.
 The Version.current and Class::is_versioned methods both take a filename
 parameter if you use a different location for the VERSION file. See the
 Version.current rdoc for details.
+
+=== Rails3 Versioning
+
+Version adds a VERSION to the applications namespace should you need to access
+the version information from within the application.
+
+So if your config/environment.rb looks like this;
+
+  # Load the rails application
+  require File.expand_path('../application', __FILE__)
+
+  # Initialize the rails application
+  Silverbug::Application.initialize!
+
+You can retrieve the current running version with;
+
+  Silverbug::VERSION
 
 === Manipulation in Code
 
