@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.date = %q{2011-05-10}
   s.email = %q{stephen@touset.org}
   s.extra_rdoc_files = ["History.rdoc", "README.rdoc", "TODO.rdoc"]
-  s.files = ["History.rdoc", "License.txt", "Rakefile", "README.rdoc", "TODO.rdoc", "VERSION", "lib/rake/version_task.rb", "lib/version/component.rb", "lib/version/ext/array.rb", "lib/version/ext/hash.rb", "lib/version/ext/module.rb", "lib/version/ext/string.rb", "lib/version.rb", "spec/spec.opts", "spec/spec_helper.rb", "spec/version_spec.rb"]
+  s.files = ["History.rdoc", "License.txt", "Rakefile", "README.rdoc", "TODO.rdoc", "VERSION", "lib/rake/version_task.rb", "lib/version/component.rb", "lib/version/railtie.rb", "lib/version.rb", "spec/spec.opts", "spec/spec_helper.rb", "spec/version_spec.rb"]
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.6.2}
