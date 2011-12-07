@@ -12,6 +12,12 @@ class Rake::VersionTask < Rake::TaskLib
   
   # when true, tags version bumps automatically (default: false)
   attr_accessor :with_git_tag
+
+  # when true, commits version bumps automatically (default: autodetect)
+  attr_accessor :with_hg
+
+  # when true, tags version bumps automatically (default: false)
+  attr_accessor :with_hg_tag
   
   # when set with a Gem::Specification, automatically emits an updated
   # gemspec on version bumps
@@ -19,11 +25,12 @@ class Rake::VersionTask < Rake::TaskLib
   
   #
   # Creates a new VersionTask with the given +filename+. Attempts to
-  # autodetect the +filetype+ and whether or not git is present.
+  # autodetect the +filetype+ and whether or not git or hg is present.
   #
   def initialize(filename = 'VERSION')
     self.filename = filename
     self.with_git = File.exist?('.git')
+    self.with_hg = File.exist?('.hg')
     
     yield(self) if block_given?
     
@@ -136,6 +143,11 @@ class Rake::VersionTask < Rake::TaskLib
       `git add #{self.gemspec}` if self.with_gemspec
       `git commit -m "Version bump to #{version}"`
       `git tag #{version}` if self.with_git_tag
+    end
+
+    if self.with_hg
+      `hg commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m "Version bump to #{version}"`
+      `hg tag #{version}` if self.with_hg_tag
     end
     
     version
