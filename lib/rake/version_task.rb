@@ -146,6 +146,8 @@ class Rake::VersionTask < Rake::TaskLib
     end
 
     if self.with_hg
+      `hg add #{self.filename}` unless `hg status -u #{self.filename}`.empty?
+      `hg add #{self.gemspec}` if (self.with_gemspec && !`hg status -u #{self.gemspec}`.empty?)
       `hg commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m "Version bump to #{version}"`
       `hg tag #{version}` if self.with_hg_tag
     end
