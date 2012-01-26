@@ -22,6 +22,12 @@ class Rake::VersionTask < Rake::TaskLib
   # when true, commits version bumps automatically (default: autodetect)
   attr_accessor :with_svn
 
+  # when true, tags version bumps automatically if the current svn URL
+  # either ends in '<base>/trunk' or '<base>/branches/<branch>' by
+  # copying the current svn URL to the '<base>/tags/<version>'
+  # (default: false)
+  attr_accessor :with_svn_tag
+  
   # when set with a Gem::Specification, automatically emits an updated
   # gemspec on version bumps
   attr_accessor :with_gemspec
@@ -158,6 +164,25 @@ class Rake::VersionTask < Rake::TaskLib
 
     if self.with_svn
       `svn commit #{self.filename} -m "Version bump to #{version}"`
+
+      # This only attempts to make 'standard' tags.  That is, if the
+      # current svn URL ends in 'trunk' or 'branches/<branch>', then
+      # it will be copied to 'tags/<version>'
+      if self.with_svn_tag
+        url = nil
+        `svn info`.each_line do |line|
+          if line =~ /^URL:\s+(.*)$/
+            url = $1
+            break
+          end
+        end
+
+        if url && url =~ /^(.*)\/(trunk|branches\/[\w]+)$/
+          base = $1
+          tag_url = "#{base}/tags/#{version}"
+          `svn copy #{url} #{tag_url} -m "Tag #{version}"`
+        end
+      end
     end
     
     version
