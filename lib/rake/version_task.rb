@@ -163,7 +163,7 @@ class Rake::VersionTask < Rake::TaskLib
     end
 
     if self.with_svn
-      `svn commit #{self.filename} -m "Version bump to #{version}"`
+      `svn commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m "Version bump to #{version}"`
 
       # This only attempts to make 'standard' tags.  That is, if the
       # current svn URL ends in 'trunk' or 'branches/<branch>', then
