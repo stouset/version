@@ -18,7 +18,10 @@ class Rake::VersionTask < Rake::TaskLib
 
   # when true, tags version bumps automatically (default: false)
   attr_accessor :with_hg_tag
-  
+
+  # when true, commits version bumps automatically (default: autodetect)
+  attr_accessor :with_svn
+
   # when set with a Gem::Specification, automatically emits an updated
   # gemspec on version bumps
   attr_accessor :with_gemspec
@@ -31,6 +34,7 @@ class Rake::VersionTask < Rake::TaskLib
     self.filename = filename
     self.with_git = File.exist?('.git')
     self.with_hg = File.exist?('.hg')
+    self.with_svn = File.exist?('.svn')
     
     yield(self) if block_given?
     
@@ -150,6 +154,10 @@ class Rake::VersionTask < Rake::TaskLib
       `hg add #{self.gemspec}` if (self.with_gemspec && !`hg status -u #{self.gemspec}`.empty?)
       `hg commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m "Version bump to #{version}"`
       `hg tag #{version}` if self.with_hg_tag
+    end
+
+    if self.with_svn
+      `svn commit #{self.filename} -m "Version bump to #{version}"`
     end
     
     version
