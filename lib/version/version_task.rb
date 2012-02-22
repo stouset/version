@@ -38,11 +38,12 @@ class Rake::VersionTask < Rake::TaskLib
   #
   def initialize(filename = 'VERSION')
     self.filename = filename
-    self.with_git = File.exist?('.git')
-    self.with_hg = File.exist?('.hg')
-    self.with_svn = File.exist?('.svn')
     
     yield(self) if block_given?
+    
+    self.with_git = self.with_git && File.exist?('.git')
+    self.with_hg = self.with_hg && File.exist?('.hg')
+    self.with_svn = self.with_svn && File.exist?('.svn')
     
     self.define
   end
@@ -82,7 +83,7 @@ class Rake::VersionTask < Rake::TaskLib
     namespace :version do
       desc 'Creates a version file with an optional VERSION parameter'
       task(:create) do
-        version = (ENV['VERSION'] || '0.0.0').to_version
+        version = Version.to_version(ENV['VERSION'] || '0.0.0')
         puts write(version)
       end
       
@@ -125,8 +126,8 @@ class Rake::VersionTask < Rake::TaskLib
     contents = path.read rescue '0.0.0'
     
     case filetype.to_s
-      when ''    then contents.chomp.to_version
-      when 'yml' then YAML::load(contents).to_version
+      when ''    then Version.to_version(contents.chomp)
+      when 'yml' then Version.to_version(YAML::load(contents))
     end
   end
   

@@ -1,10 +1,10 @@
 $: << 'lib'
 
-require 'rake/version_task'
+require 'version/version_task'
 
 require 'rubygems'
 require 'rake/gempackagetask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 require 'spec/rake/spectask'
 
 spec = Gem::Specification.new do |s|

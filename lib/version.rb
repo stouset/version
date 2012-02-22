@@ -29,8 +29,8 @@ class Version
     return nil unless path
     
     case path.extname
-      when ''      then path.read.strip.to_version
-      when '.yml'  then YAML::load(path.read).to_version
+      when ''      then Version.to_version(path.read.strip)
+      when '.yml'  then Version.to_version(YAML::load(path.read))
     end
   end
   
@@ -44,6 +44,13 @@ class Version
       break d.join('VERSION')     if d.join('VERSION').file?
       break d.join('VERSION.yml') if d.join('VERSION.yml').file?
     end
+  end
+
+  # 
+  # Converts a string into a Version
+  #
+  def self.to_version(str)
+    Version.new *str.split(%r{\.})
   end
   
   #
