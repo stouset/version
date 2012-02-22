@@ -49,8 +49,14 @@ class Version
   # 
   # Converts a string into a Version
   #
-  def self.to_version(str)
-    Version.new *str.split(%r{\.})
+  def self.to_version(obj)
+    if obj.kind_of? String
+      Version.new *obj.split(%r{\.})
+    elsif obj.kind_of? Hash
+      Version.new *obj.values_at(:major, :minor, :revision, :rest)
+    elsif obj.kind_of? Array
+      Version.new *obj
+    end
   end
   
   #
