@@ -1,5 +1,4 @@
 require 'version/ext/module'
-
 require 'pathname'
 
 #
@@ -44,7 +43,7 @@ class Version
   end
 
   # 
-  # Converts a string into a Version
+  # Converts a String, Hash, or Array into a Version instance
   #
   def self.to_version(obj)
     if obj.kind_of? String

@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = "version"
-  s.version = "1.0.3"
+  s.version = "1.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Stephen Touset"]
-  s.date = "2012-02-22"
+  s.date = "2012-02-24"
   s.email = "stephen@touset.org"
   s.extra_rdoc_files = ["History.rdoc", "README.rdoc", "TODO.rdoc"]
   s.files = ["History.rdoc", "lib", "License.txt", "Rakefile", "README.rdoc", "spec", "TODO.rdoc", "VERSION", "version.gemspec", "lib/version/component.rb", "lib/version/ext/module.rb", "lib/version/version_task.rb", "lib/version.rb", "spec/spec.opts", "spec/spec_helper.rb", "spec/version_spec.rb"]
