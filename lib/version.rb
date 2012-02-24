@@ -1,7 +1,4 @@
-require 'version/ext/array'
 require 'version/ext/module'
-require 'version/ext/hash'
-require 'version/ext/string'
 
 require 'pathname'
 
