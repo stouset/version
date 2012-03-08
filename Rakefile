@@ -1,7 +1,6 @@
 $: << 'lib'
 
 require 'version/version_task'
-
 require 'rubygems'
 require 'rake/gempackagetask'
 require 'rdoc/task'
@@ -40,7 +39,6 @@ Spec::Rake::SpecTask.new(:spec) do |task|
 end
 
 Rake::VersionTask.new do |v|
-  v.with_git_tag = true
   v.with_gemspec = spec
 end
 

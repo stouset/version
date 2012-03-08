@@ -43,7 +43,7 @@ class Rake::VersionTask < Rake::TaskLib
     self.with_git = self.with_git && File.exist?('.git')
     self.with_hg = self.with_hg && File.exist?('.hg')
     self.with_svn = self.with_svn && File.exist?('.svn')
-    
+
     fail 'Filename required' if self.filename.nil?
     
     file filename
@@ -56,12 +56,12 @@ class Rake::VersionTask < Rake::TaskLib
     namespace :version do
 
       #add to this task to perform some operation post-bump
-      task :sync
+      @sync = task :sync
 
       desc "Bump to #{read.bump!}"
-      task :bump => filename do
+      task :bump => filename do |t|
         puts write(read.bump!)
-        Rake::Task['version:sync'].execute()
+        @sync.execute()
       end
       
       namespace :bump do
@@ -69,25 +69,25 @@ class Rake::VersionTask < Rake::TaskLib
         desc "Bump to #{read.bump!(:major)}"
         task :major => filename do
           puts write(read.bump!(:major))
-          Rake::Task['version:sync'].execute()
+          @sync.execute()
         end
         
         desc "Bump to #{read.bump!(:minor)}"
         task :minor => filename do
           puts write(read.bump!(:minor))
-          Rake::Task['version:sync'].execute()
+          @sync.execute()
         end
         
         desc "Bump to #{read.bump!(:revision)}"
         task :revision => filename do
           puts write(read.bump!(:revision))
-          Rake::Task['version:sync'].execute()
+          @sync.execute()
         end
         
         desc "Bump to #{read.bump!(:pre)}"
         task :pre => filename do
           puts write(read.bump!(:pre))
-          Rake::Task['version:sync'].execute()
+          @sync.execute()
         end
         
         namespace :pre do
@@ -95,19 +95,19 @@ class Rake::VersionTask < Rake::TaskLib
           desc "Bump to #{read.bump!(:major, true)}"
           task :major => filename do
             puts write(read.bump!(:major, true))
-            Rake::Task['version:sync'].execute()
+            @sync.execute()
           end
           
           desc "Bump to #{read.bump!(:minor, true)}"
-          task :minor => filename do 
+          task :minor => filename do |t|
             puts write(read.bump!(:minor, true))
-            Rake::Task['version:sync'].execute()
+            @sync.execute()
           end
           
           desc "Bump to #{read.bump!(:revision, true)}"
           task :revision => filename do
             puts write(read.bump!(:revision, true))
-            Rake::Task['version:sync'].execute()
+            @sync.execute()
           end
 
         end#namespace :pre do
