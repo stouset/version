@@ -1,5 +1,4 @@
 require 'version'
-
 require 'rake/tasklib'
 require 'pathname'
 
@@ -38,13 +37,90 @@ class Rake::VersionTask < Rake::TaskLib
   #
   def initialize(filename = 'VERSION')
     self.filename = filename
-    self.with_git = File.exist?('.git')
-    self.with_hg = File.exist?('.hg')
-    self.with_svn = File.exist?('.svn')
     
     yield(self) if block_given?
     
-    self.define
+    self.with_git = self.with_git && File.exist?('.git')
+    self.with_hg = self.with_hg && File.exist?('.hg')
+    self.with_svn = self.with_svn && File.exist?('.svn')
+
+    fail 'Filename required' if self.filename.nil?
+    
+    file filename
+    
+    desc "Print the current version number (#{read})"
+    task :version => filename do
+      puts read
+    end
+    
+    namespace :version do
+
+      #add to this task to perform some operation post-bump
+      @sync = task :sync
+
+      desc "Bump to #{read.bump!}"
+      task :bump => filename do |t|
+        puts write(read.bump!)
+        @sync.execute()
+      end
+      
+      namespace :bump do
+
+        desc "Bump to #{read.bump!(:major)}"
+        task :major => filename do
+          puts write(read.bump!(:major))
+          @sync.execute()
+        end
+        
+        desc "Bump to #{read.bump!(:minor)}"
+        task :minor => filename do
+          puts write(read.bump!(:minor))
+          @sync.execute()
+        end
+        
+        desc "Bump to #{read.bump!(:revision)}"
+        task :revision => filename do
+          puts write(read.bump!(:revision))
+          @sync.execute()
+        end
+        
+        desc "Bump to #{read.bump!(:pre)}"
+        task :pre => filename do
+          puts write(read.bump!(:pre))
+          @sync.execute()
+        end
+        
+        namespace :pre do
+          
+          desc "Bump to #{read.bump!(:major, true)}"
+          task :major => filename do
+            puts write(read.bump!(:major, true))
+            @sync.execute()
+          end
+          
+          desc "Bump to #{read.bump!(:minor, true)}"
+          task :minor => filename do |t|
+            puts write(read.bump!(:minor, true))
+            @sync.execute()
+          end
+          
+          desc "Bump to #{read.bump!(:revision, true)}"
+          task :revision => filename do
+            puts write(read.bump!(:revision, true))
+            @sync.execute()
+          end
+
+        end#namespace :pre do
+      end#namespace :bump do
+
+      desc 'Creates a version file with an optional VERSION parameter'
+      task :create do
+        version = Version.to_version(ENV['VERSION'] || '0.0.0')
+        puts write(version)
+      end
+
+    end#namespace :version do
+
   end
   
   #
@@ -68,54 +144,6 @@ class Rake::VersionTask < Rake::TaskLib
     Pathname.new(self.filename)
   end
   
-  #
-  # Defines the rake tasks.
-  #
-  def define
-    fail 'Filename required' if self.filename.nil?
-    
-    file filename
-    
-    desc "Print the current version number (#{read})"
-    task(:version => filename) { puts read }
-    
-    namespace :version do
-      desc 'Creates a version file with an optional VERSION parameter'
-      task(:create) do
-        version = (ENV['VERSION'] || '0.0.0').to_version
-        puts write(version)
-      end
-      
-      desc "Bump to #{read.bump!}"
-      task(:bump => filename) { puts write(read.bump!) }
-      
-      namespace :bump do
-        desc "Bump to #{read.bump!(:major)}"
-        task(:major => filename) { puts write(read.bump!(:major)) }
-        
-        desc "Bump to #{read.bump!(:minor)}"
-        task(:minor => filename) { puts write(read.bump!(:minor)) }
-        
-        desc "Bump to #{read.bump!(:revision)}"
-        task(:revision => filename) { puts write(read.bump!(:revision)) }
-        
-        desc "Bump to #{read.bump!(:pre)}"
-        task(:pre => filename) { puts write(read.bump!(:pre)) }
-        
-        namespace :pre do
-          desc "Bump to #{read.bump!(:major, true)}"
-          task(:major => filename) { puts write(read.bump!(:major, true)) }
-          
-          desc "Bump to #{read.bump!(:minor, true)}"
-          task(:minor => filename) { puts write(read.bump!(:minor, true)) }
-          
-          desc "Bump to #{read.bump!(:revision, true)}"
-          task(:revision => filename) { puts write(read.bump!(:revision, true)) }
-        end
-      end
-    end
-  end
-  
   private
   
   #
@@ -125,8 +153,8 @@ class Rake::VersionTask < Rake::TaskLib
     contents = path.read rescue '0.0.0'
     
     case filetype.to_s
-      when ''    then contents.chomp.to_version
-      when 'yml' then YAML::load(contents).to_version
+      when ''    then Version.to_version(contents.chomp)
+      when 'yml' then Version.to_version(YAML::load(contents))
     end
   end
   
@@ -134,7 +162,7 @@ class Rake::VersionTask < Rake::TaskLib
   # Writes out +version+ to the file at +filename+ with the correct format.
   #
   def write(version)
-    return if version == read
+    return if path.exist? && version == read
     
     path.open('w') do |io|
       io << case filetype.to_s

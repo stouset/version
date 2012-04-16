@@ -1,8 +1,4 @@
-require 'version/ext/array'
 require 'version/ext/module'
-require 'version/ext/hash'
-require 'version/ext/string'
-
 require 'pathname'
 
 #
@@ -29,8 +25,8 @@ class Version
     return nil unless path
     
     case path.extname
-      when ''      then path.read.strip.to_version
-      when '.yml'  then YAML::load(path.read).to_version
+      when ''      then Version.to_version(path.read.strip)
+      when '.yml'  then Version.to_version(YAML::load(path.read))
     end
   end
   
@@ -43,6 +39,19 @@ class Version
     Pathname(filename).dirname.expand_path.ascend do |d|
       break d.join('VERSION')     if d.join('VERSION').file?
       break d.join('VERSION.yml') if d.join('VERSION.yml').file?
+    end
+  end
+
+  # 
+  # Converts a String, Hash, or Array into a Version instance
+  #
+  def self.to_version(obj)
+    if obj.kind_of? String
+      Version.new *obj.split(%r{\.})
+    elsif obj.kind_of? Hash
+      Version.new *obj.values_at(:major, :minor, :revision, :rest)
+    elsif obj.kind_of? Array
+      Version.new *obj
     end
   end
   
