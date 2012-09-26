@@ -24,7 +24,14 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '~> 2.11'
 end
 
-Rake::GemPackageTask.new(spec) do |gem|
+namespace :gem do
+  desc "Generate a new *.gemspec file"
+  task :gemspec do
+    File.open('version.gemspec', 'w') { |f| f.print(spec.to_ruby) }
+  end
+end
+
+Gem::PackageTask.new(spec) do |gem|
   gem.need_tar = true
 end
 
