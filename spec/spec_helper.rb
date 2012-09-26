@@ -1,9 +1,6 @@
-$:.unshift File.dirname(__FILE__)
-$:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+require 'bundler/setup'
+Bundler.setup(:development)
 
 require 'version'
-require 'spec'
-require 'spec/autorun'
-
-Spec::Runner.configure do |config|
-end
+require 'rspec'
+require 'rspec/autorun'
