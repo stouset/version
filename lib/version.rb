@@ -105,7 +105,7 @@ class Version
   end
   
   #
-  # Bumps the version number. Pass +component+ to bump a component other than
+  # Bumps the version number and replaces the current object. Pass +component+ to bump a component other than
   # the least-significant part. Set +pre+ to true if you want to bump the
   # component to a prerelease version. Set +trim+ to true if you want the
   # version to be resized to only large enough to contain the component set.
@@ -136,7 +136,14 @@ class Version
         self
     end
   end
-    
+  
+  #
+  # Bumps the version number.
+  #
+  def bump(component = -1, pre = false, trim = false)
+    self.dup.bump!(component, pre, trim)
+  end
+  
   #
   # Returns the current length of the version number.
   #
