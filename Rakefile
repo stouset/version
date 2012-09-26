@@ -3,9 +3,9 @@ $: << 'lib'
 require 'rake/version_task'
 
 require 'rubygems'
-require 'rake/gempackagetask'
-require 'rake/rdoctask'
-require 'spec/rake/spectask'
+require 'rubygems/package_task'
+require 'rdoc/task'
+require 'rspec/core/rake_task'
 
 spec = Gem::Specification.new do |s|
   s.name    = 'version'
@@ -20,7 +20,8 @@ spec = Gem::Specification.new do |s|
   s.extra_rdoc_files = Dir['*.rdoc']
   s.rdoc_options = %w{ --main README.rdoc }
   
-  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rake', '~> 0.9'
+  s.add_development_dependency 'rspec', '~> 2.11'
 end
 
 Rake::GemPackageTask.new(spec) do |gem|
@@ -35,9 +36,8 @@ Rake::RDocTask.new do |doc|
   doc.rdoc_files.include('lib/**/*.rb')
 end
 
-Spec::Rake::SpecTask.new(:spec) do |task|
-  task.spec_files = FileList['spec/**/*_spec.rb']
-end
+desc "Run specs"
+RSpec::Core::RakeTask.new
 
 Rake::VersionTask.new do |v|
   v.with_git_tag = true

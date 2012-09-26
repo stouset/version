@@ -22,5 +22,5 @@ PLATFORMS
 
 DEPENDENCIES
   rake (~> 0.9)
-  rspec
+  rspec (~> 2.11)
   version!
