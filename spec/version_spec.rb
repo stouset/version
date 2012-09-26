@@ -204,5 +204,15 @@ describe Version do
     v0_1a.should    < v0_1
     v0_01.should    < v0_10
     v0_9.should     < v0_10
+    v0_10_0.should  < v0_11_0
+  end
+  
+  it "should order correctly in an Array (example 1)" do
+    [v1_0_0, v0_0_1, v0_1_0].should == [v0_0_1, v0_1_0, v1_0_0]
+  end
+  
+  it "should order correctly in an Array (example 2)" do
+    [v0_13_1, v1_0_0, v0_12_1, v0_12_2].should == [v0_12_1, v0_12_2, v0_13_1, v1_0_0]
   end
 end
+
