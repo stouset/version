@@ -1,3 +1,5 @@
+require 'bundler/setup'
+
 require 'version/ext/array'
 require 'version/ext/module'
 require 'version/ext/hash'

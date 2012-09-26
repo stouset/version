@@ -25,8 +25,8 @@ spec = Gem::Specification.new do |s|
 end
 
 namespace :gem do
-  desc "Generate a new *.gemspec file"
-  task :gemspec do
+  desc "Generate a new gemspec file"
+  task :spec do
     File.open('version.gemspec', 'w') { |f| f.print(spec.to_ruby) }
   end
 end
