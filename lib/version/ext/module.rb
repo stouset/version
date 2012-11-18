@@ -8,4 +8,5 @@ class Module
   def is_versioned
     const_set :VERSION, Version.current(File.dirname(caller.first))
   end
+  alias_method :has_version, :is_versioned
 end
