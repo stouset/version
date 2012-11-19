@@ -3,8 +3,8 @@ $: << 'lib'
 require 'rake/version_task'
 
 require 'rubygems'
-require 'rake/gempackagetask'
-require 'rake/rdoctask'
+require 'rubygems/package_task'
+require 'rdoc/task'
 require 'spec/rake/spectask'
 
 spec = Gem::Specification.new do |s|
@@ -20,10 +20,11 @@ spec = Gem::Specification.new do |s|
   s.extra_rdoc_files = Dir['*.rdoc']
   s.rdoc_options = %w{ --main README.rdoc }
   
-  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rspec', '~> 1'
 end
 
-Rake::GemPackageTask.new(spec) do |gem|
+Gem::PackageTask.new(spec) do |gem|
   gem.need_tar = true
 end
 
