@@ -141,35 +141,35 @@ class Rake::VersionTask < Rake::TaskLib
   #
   def write(version)
     return if version == read
-    
+
     path.open('w') do |io|
       io << case filetype.to_s
         when ''    then version.to_s + "\n"
         when 'yml' then version.to_yaml
       end
     end
-    
+
     if self.with_gemspec
       with_gemspec.version = version
       gemspec.open('w') {|io| io << with_gemspec.to_ruby }
     end
-    
+
     if self.with_git
       `git add #{self.filename}`
       `git add #{self.gemspec}` if self.with_gemspec
-      `git commit -m #{commit_message}`
+      `git commit -m "#{commit_message}"`
       `git tag #{version}` if self.with_git_tag
     end
 
     if self.with_hg
       `hg add #{self.filename}` unless `hg status -u #{self.filename}`.empty?
       `hg add #{self.gemspec}` if (self.with_gemspec && !`hg status -u #{self.gemspec}`.empty?)
-      `hg commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m #{commit_message}`
+      `hg commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m "#{commit_message}"`
       `hg tag #{version}` if self.with_hg_tag
     end
 
     if self.with_svn
-      `svn commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m #{commit_message}`
+      `svn commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m "#{commit_message}"`
 
       # This only attempts to make 'standard' tags.  That is, if the
       # current svn URL ends in 'trunk' or 'branches/<branch>', then
