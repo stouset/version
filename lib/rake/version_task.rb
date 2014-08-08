@@ -31,7 +31,10 @@ class Rake::VersionTask < Rake::TaskLib
   # when set with a Gem::Specification, automatically emits an updated
   # gemspec on version bumps
   attr_accessor :with_gemspec
-  
+
+  # when set allows to override commit message
+  attr_accessor :with_commit_message
+
   #
   # Creates a new VersionTask with the given +filename+. Attempts to
   # autodetect the +filetype+ and whether or not git or hg is present.
@@ -129,41 +132,44 @@ class Rake::VersionTask < Rake::TaskLib
       when 'yml' then YAML::load(contents).to_version
     end
   end
-  
+
+  def commit_message
+    self.with_commit_message || "Version bump to #{version}"
+  end
   #
   # Writes out +version+ to the file at +filename+ with the correct format.
   #
   def write(version)
     return if version == read
-    
+
     path.open('w') do |io|
       io << case filetype.to_s
         when ''    then version.to_s + "\n"
         when 'yml' then version.to_yaml
       end
     end
-    
+
     if self.with_gemspec
       with_gemspec.version = version
       gemspec.open('w') {|io| io << with_gemspec.to_ruby }
     end
-    
+
     if self.with_git
       `git add #{self.filename}`
       `git add #{self.gemspec}` if self.with_gemspec
-      `git commit -m "Version bump to #{version}"`
+      `git commit -m "#{commit_message}"`
       `git tag #{version}` if self.with_git_tag
     end
 
     if self.with_hg
       `hg add #{self.filename}` unless `hg status -u #{self.filename}`.empty?
       `hg add #{self.gemspec}` if (self.with_gemspec && !`hg status -u #{self.gemspec}`.empty?)
-      `hg commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m "Version bump to #{version}"`
+      `hg commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m "#{commit_message}"`
       `hg tag #{version}` if self.with_hg_tag
     end
 
     if self.with_svn
-      `svn commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m "Version bump to #{version}"`
+      `svn commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m "#{commit_message}"`
 
       # This only attempts to make 'standard' tags.  That is, if the
       # current svn URL ends in 'trunk' or 'branches/<branch>', then
