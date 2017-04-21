@@ -133,7 +133,7 @@ class Rake::VersionTask < Rake::TaskLib
     end
   end
 
-  def commit_message
+  def commit_message(version)
     self.with_commit_message || "Version bump to #{version}"
   end
   #
@@ -157,19 +157,19 @@ class Rake::VersionTask < Rake::TaskLib
     if self.with_git
       `git add #{self.filename}`
       `git add #{self.gemspec}` if self.with_gemspec
-      `git commit -m "#{commit_message}"`
+      `git commit -m "#{commit_message(version)}"`
       `git tag #{version}` if self.with_git_tag
     end
 
     if self.with_hg
       `hg add #{self.filename}` unless `hg status -u #{self.filename}`.empty?
       `hg add #{self.gemspec}` if (self.with_gemspec && !`hg status -u #{self.gemspec}`.empty?)
-      `hg commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m "#{commit_message}"`
+      `hg commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m "#{commit_message(version)}"`
       `hg tag #{version}` if self.with_hg_tag
     end
 
     if self.with_svn
-      `svn commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m "#{commit_message}"`
+      `svn commit #{self.filename} #{self.with_gemspec ? self.gemspec : ''} -m "#{commit_message(version)}"`
 
       # This only attempts to make 'standard' tags.  That is, if the
       # current svn URL ends in 'trunk' or 'branches/<branch>', then
