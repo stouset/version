@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rspec/its'
 
 module ImplicitVersion
   def method_missing(name, *args, &block)
@@ -15,41 +15,41 @@ describe Version do
   
   subject { v2_9 }
   
-  its(:major)       { should == '2'   }
-  its(:minor)       { should == '9'   }
-  its(:revision)    { should be_nil   }
-  its(:prerelease?) { should be_false }
+  its(:major)       { is_expected.to eq('2')  }
+  its(:minor)       { is_expected.to eq('9')  }
+  its(:revision)    { is_expected.to be_nil   }
+  its(:prerelease?) { is_expected.to be_falsey }
   
-  it 'should bump to 2.10' do
-    subject.bump!.should == v2_10
+  it 'is_expected.to bump to 2.10' do
+    expect(subject.bump!).to eq(v2_10)
   end
   
-  it 'should major-bump to 3.0' do
-    subject.bump!(:major).should == v3_0
+  it 'is_expected.to major-bump to 3.0' do
+    expect(subject.bump!(:major)).to eq(v3_0)
   end
   
-  it 'should minor-bump to 2.10' do
-    subject.bump!(:minor).should == v2_10
+  it 'is_expected.to minor-bump to 2.10' do
+    expect(subject.bump!(:minor)).to eq(v2_10)
   end
   
-  it 'should revision-bump to 2.9.1' do
-    subject.bump!(:revision).should == v2_9_1
+  it 'is_expected.to revision-bump to 2.9.1' do
+    expect(subject.bump!(:revision)).to eq(v2_9_1)
   end
   
-  it 'should prerelease-bump to 2.10a' do
-    subject.bump!(:pre).should == v2_10a
+  it 'is_expected.to prerelease-bump to 2.10a' do
+    expect(subject.bump!(:pre)).to eq(v2_10a)
   end
   
-  it 'should prerelease-bump major to 3_0a' do
-    subject.bump!(:major, true).should == v3_0a
+  it 'is_expected.to prerelease-bump major to 3_0a' do
+    expect(subject.bump!(:major, true)).to eq(v3_0a)
   end
   
-  it 'should prerelease-bump minor to 2.10a' do
-    subject.bump!(:minor, true).should == v2_10a
+  it 'is_expected.to prerelease-bump minor to 2.10a' do
+    expect(subject.bump!(:minor, true)).to eq(v2_10a)
   end
   
-  it 'should prerelease-bump revision to 2.9.1a' do
-    subject.bump!(:revision, true).should == v2_9_1a
+  it 'is_expected.to prerelease-bump revision to 2.9.1a' do
+    expect(subject.bump!(:revision, true)).to eq(v2_9_1a)
   end
 end
 
@@ -58,41 +58,41 @@ describe Version do
   
   subject { v0_10_0 }
   
-  its(:major)       { should == '0'   }
-  its(:minor)       { should == '10'   }
-  its(:revision)    { should == '0'   }
-  its(:prerelease?) { should be_false }
+  its(:major)       { is_expected.to eq('0')   }
+  its(:minor)       { is_expected.to eq('10')   }
+  its(:revision)    { is_expected.to eq('0')   }
+  its(:prerelease?) { is_expected.to be_falsey }
   
-  it 'should bump to 0.10.1' do
-    subject.bump!.should == v0_10_1
+  it 'is_expected.to bump to 0.10.1' do
+    expect(subject.bump!).to eq(v0_10_1)
   end
   
-  it 'should major-bump to 1.0.0' do
-    subject.bump!(:major).should == v1_0_0
+  it 'is_expected.to major-bump to 1.0.0' do
+    expect(subject.bump!(:major)).to eq(v1_0_0)
   end
   
-  it 'should minor-bump to 0.11.0' do
-    subject.bump!(:minor).should == v0_11_0
+  it 'is_expected.to minor-bump to 0.11.0' do
+    expect(subject.bump!(:minor)).to eq(v0_11_0)
   end
   
-  it 'should revision-bump to 0.10.1' do
-    subject.bump!(:revision).should == v0_10_1
+  it 'is_expected.to revision-bump to 0.10.1' do
+    expect(subject.bump!(:revision)).to eq(v0_10_1)
   end
   
-  it 'should prerelease-bump to 0.10.1a' do
-    subject.bump!(:pre).should == v0_10_1a
+  it 'is_expected.to prerelease-bump to 0.10.1a' do
+    expect(subject.bump!(:pre)).to eq(v0_10_1a)
   end
   
-  it 'should prerelease-bump major to 1.0.0a' do
-    subject.bump!(:major, true).should == v1_0_0a
+  it 'is_expected.to prerelease-bump major to 1.0.0a' do
+    expect(subject.bump!(:major, true)).to eq(v1_0_0a)
   end
   
-  it 'should prerelease-bump minor to 0.11.0a' do
-    subject.bump!(:minor, true).should == v0_11_0a
+  it 'is_expected.to prerelease-bump minor to 0.11.0a' do
+    expect(subject.bump!(:minor, true)).to eq(v0_11_0a)
   end
   
-  it 'should prerelease-bump revision to 0.10.1a' do
-    subject.bump!(:revision, true).should == v0_10_1a
+  it 'is_expected.to prerelease-bump revision to 0.10.1a' do
+    expect(subject.bump!(:revision, true)).to eq(v0_10_1a)
   end
 end
 
@@ -102,41 +102,41 @@ describe Version, 'with a prerelease revision' do
   
   subject { v1_6_3a }
   
-  its(:major)       { should == '1'  }
-  its(:minor)       { should == '6'  }
-  its(:revision)    { should == '3a' }
-  its(:prerelease?) { should be_true }
+  its(:major)       { is_expected.to eq('1')  }
+  its(:minor)       { is_expected.to eq('6')  }
+  its(:revision)    { is_expected.to eq('3a') }
+  its(:prerelease?) { is_expected.to be_truthy }
   
-  it 'should bump to 1.6.3' do
-    subject.bump!.should == v1_6_3
+  it 'is_expected.to bump to 1.6.3' do
+    expect(subject.bump!).to eq(v1_6_3)
   end
   
-  it 'should major-bump to 2.0.0' do
-    subject.bump!(:major).should == v2_0_0
+  it 'is_expected.to major-bump to 2.0.0' do
+    expect(subject.bump!(:major)).to eq(v2_0_0)
   end
   
-  it 'should minor-bump to 1.7.0' do
-    subject.bump!(:minor).should == v1_7_0
+  it 'is_expected.to minor-bump to 1.7.0' do
+    expect(subject.bump!(:minor)).to eq(v1_7_0)
   end
   
-  it 'should revision-bump to 1.6.3' do
-    subject.bump!(:revision).should == v1_6_3
+  it 'is_expected.to revision-bump to 1.6.3' do
+    expect(subject.bump!(:revision)).to eq(v1_6_3)
   end
   
-  it 'should prerelease-bump to 1.6.3b' do
-    subject.bump!(:pre).should == v1_6_3b
+  it 'is_expected.to prerelease-bump to 1.6.3b' do
+    expect(subject.bump!(:pre)).to eq(v1_6_3b)
   end
   
-  it 'should prerelease-bump major to 2.0.0a' do
-    subject.bump!(:major, true).should == v2_0_0a
+  it 'is_expected.to prerelease-bump major to 2.0.0a' do
+    expect(subject.bump!(:major, true)).to eq(v2_0_0a)
   end
   
-  it 'should prerelease-bump minor to 1.7.0a' do
-    subject.bump!(:minor, true).should == v1_7_0a
+  it 'is_expected.to prerelease-bump minor to 1.7.0a' do
+    expect(subject.bump!(:minor, true)).to eq(v1_7_0a)
   end
   
-  it 'should prerelease-bump revision to 1.6.4a' do
-    subject.bump!(:revision, true).should == v1_6_4a
+  it 'is_expected.to prerelease-bump revision to 1.6.4a' do
+    expect(subject.bump!(:revision, true)).to eq(v1_6_4a)
   end
 end
 
@@ -145,64 +145,64 @@ describe Version, 'with a prerelease minor version' do
   
   subject { v1_6a }
   
-  its(:major)       { should == '1'  }
-  its(:minor)       { should == '6a'  }
-  its(:revision)    { should == nil }
-  its(:prerelease?) { should be_true }
+  its(:major)       { is_expected.to eq('1')  }
+  its(:minor)       { is_expected.to eq('6a')  }
+  its(:revision)    { is_expected.to eq(nil) }
+  its(:prerelease?) { is_expected.to be_truthy }
   
-  it 'should bump to 1.6' do
-    subject.bump!.should == v1_6
+  it 'is_expected.to bump to 1.6' do
+    expect(subject.bump!).to eq(v1_6)
   end
   
-  it 'should major-bump to 2.0' do
-    subject.bump!(:major).should == v2_0
+  it 'is_expected.to major-bump to 2.0' do
+    expect(subject.bump!(:major)).to eq(v2_0)
   end
   
-  it 'should minor-bump to 1.6' do
-    subject.bump!(:minor).should == v1_6
+  it 'is_expected.to minor-bump to 1.6' do
+    expect(subject.bump!(:minor)).to eq(v1_6)
   end
   
-  it 'should revision-bump to 1.6.1' do
-    subject.bump!(:revision).should == v1_6_1
+  it 'is_expected.to revision-bump to 1.6.1' do
+    expect(subject.bump!(:revision)).to eq(v1_6_1)
   end
   
-  it 'should bump to 1.6b' do
-    subject.bump!(:pre).should == v1_6b
+  it 'is_expected.to bump to 1.6b' do
+    expect(subject.bump!(:pre)).to eq(v1_6b)
   end
   
-  it 'should prerelease-bump major to 2.0a' do
-    subject.bump!(:major, true).should == v2_0a
+  it 'is_expected.to prerelease-bump major to 2.0a' do
+    expect(subject.bump!(:major, true)).to eq(v2_0a)
   end
   
-  it 'should prerelease-bump minor to 1.7a' do
-    subject.bump!(:minor, true).should == v1_7a
+  it 'is_expected.to prerelease-bump minor to 1.7a' do
+    expect(subject.bump!(:minor, true)).to eq(v1_7a)
   end
   
-  it 'should prerelease-bump revision to 1.6.1a' do
-    subject.bump!(:revision, true).should == v1_6_1a
+  it 'is_expected.to prerelease-bump revision to 1.6.1a' do
+    expect(subject.bump!(:revision, true)).to eq(v1_6_1a)
   end
 end
 
 describe Version do
   include ImplicitVersion
   
-  it 'should preserve equality' do
-    v0_0.should       == v0_0
-    v0_1_1.should     == v0_1_1
-    v0_4_alpha.should == v0_4_alpha
-    v1_0_2.should     == v1_0_2
-    v1_0_2b.should    == v1_0_2b
-    v1_01.should      == v1_01
-    v1_10.should      == v1_10
-    v2_0.should       == v2_0
-    va.should         == vb
+  it 'is_expected.to preserve equality' do
+    expect(v0_0).to       eq(v0_0)
+    expect(v0_1_1).to     eq(v0_1_1)
+    expect(v0_4_alpha).to eq(v0_4_alpha)
+    expect(v1_0_2).to     eq(v1_0_2)
+    expect(v1_0_2b).to    eq(v1_0_2b)
+    expect(v1_01).to      eq(v1_01)
+    expect(v1_10).to      eq(v1_10)
+    expect(v2_0).to       eq(v2_0)
+    expect(va).to         eq(vb)
   end
   
-  it 'should order correctly' do
-    v0_0.should     < v0_0_0_0_0_1
-    v0_0_0_1.should < v1
-    v0_1a.should    < v0_1
-    v0_01.should    < v0_10
-    v0_9.should     < v0_10
+  it 'is_expected.to order correctly' do
+    expect(v0_0).to be      < v0_0_0_0_0_1
+    expect(v0_0_0_1).to be  < v1
+    expect(v0_1a).to be     < v0_1
+    expect(v0_01).to be     < v0_10
+    expect(v0_9).to be      < v0_10
   end
 end
