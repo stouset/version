@@ -5,7 +5,7 @@ require 'rake/version_task'
 require 'rubygems'
 require 'rubygems/package_task'
 require 'rdoc/task'
-require 'spec/rake/spectask'
+require 'rspec/core/rake_task'
 
 spec = Gem::Specification.new do |s|
   s.name    = 'version'
@@ -36,8 +36,8 @@ Rake::RDocTask.new do |doc|
   doc.rdoc_files.include('lib/**/*.rb')
 end
 
-Spec::Rake::SpecTask.new(:spec) do |task|
-  task.spec_files = FileList['spec/**/*_spec.rb']
+RSpec::Core::RakeTask.new(:spec) do |task|
+  task.pattern = 'spec/**/*_spec.rb'
 end
 
 Rake::VersionTask.new do |v|

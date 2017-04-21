@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'rspec/its'
 
 module ImplicitVersion
   def method_missing(name, *args, &block)
@@ -18,7 +19,7 @@ describe Version do
   its(:major)       { should == '2'   }
   its(:minor)       { should == '9'   }
   its(:revision)    { should be_nil   }
-  its(:prerelease?) { should be_false }
+  its(:prerelease?) { should be_falsey }
   
   it 'should bump to 2.10' do
     subject.bump!.should == v2_10
@@ -61,7 +62,7 @@ describe Version do
   its(:major)       { should == '0'   }
   its(:minor)       { should == '10'   }
   its(:revision)    { should == '0'   }
-  its(:prerelease?) { should be_false }
+  its(:prerelease?) { should be_falsey }
   
   it 'should bump to 0.10.1' do
     subject.bump!.should == v0_10_1
@@ -105,7 +106,7 @@ describe Version, 'with a prerelease revision' do
   its(:major)       { should == '1'  }
   its(:minor)       { should == '6'  }
   its(:revision)    { should == '3a' }
-  its(:prerelease?) { should be_true }
+  its(:prerelease?) { should be_truthy }
   
   it 'should bump to 1.6.3' do
     subject.bump!.should == v1_6_3
@@ -148,7 +149,7 @@ describe Version, 'with a prerelease minor version' do
   its(:major)       { should == '1'  }
   its(:minor)       { should == '6a'  }
   its(:revision)    { should == nil }
-  its(:prerelease?) { should be_true }
+  its(:prerelease?) { should be_truthy }
   
   it 'should bump to 1.6' do
     subject.bump!.should == v1_6

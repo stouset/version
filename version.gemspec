@@ -12,5 +12,6 @@ Gem::Specification.new do |s|
   s.rdoc_options = %w{ --main README.rdoc }
   
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'rspec', '~> 1'
+  s.add_development_dependency 'rspec', '~> 3'
+  s.add_development_dependency 'rspec-its', '~> 1'
 end
